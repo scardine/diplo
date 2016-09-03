@@ -67,3 +67,14 @@ class Dado(NamedModel):
 
     class Meta:
         unique_together = (('indicador', 'localidade', 'ano'),)
+
+
+class Pipeline(models.Model):
+    nome = models.CharField(max_length=200)
+    filtros = models.TextField(null=True, blank=True)
+    transforms = models.TextField(u"Transformações", null=True, blank=True)
+    ordens = models.TextField(u'Ordenação', null=True, blank=True)
+
+
+
+

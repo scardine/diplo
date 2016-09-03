@@ -2,3 +2,13 @@
 
 {% block breadcrumbs %}{% endblock %}
 
+{% block content %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+</script>
+<div class="well">
+    <h1>Exemplo de Gráfico</h1>
+    {{ chart.as_html }}
+</div>
+{% endblock %}

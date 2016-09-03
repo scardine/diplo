@@ -4,17 +4,15 @@
 {% block crumbs %}
     {% with tema=object.tema %}
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'tema-list' %}">Temas</a></li>
+        <li><a href="{% url 'tema-list' %}">Dados</a></li>
         <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
         <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
     {% endwith %}
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1><small>{{ object.tema }}:</small> {{ object.nome }}</h1>
-        <div>
-            {{ object.dados_html|safe }}
-        </div>
+    <h1><small>{{ object.tema }}:</small> {{ object.nome }}</h1>
+    <div>
+        {{ object.dados_html|safe }}
     </div>
 {% endblock %}
