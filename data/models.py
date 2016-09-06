@@ -1,8 +1,10 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django_pandas.io import read_frame
+from fontawesome.fields import IconField
 
 
 class NamedModel(models.Model):
@@ -25,7 +27,7 @@ class Fonte(NamedModel):
 
 class Tema(NamedModel):
     descricao = models.TextField(null=True, blank=True)
-    ordem = models.IntegerField(default=1)
+    ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta:
         ordering = ('ordem', 'nome')
@@ -69,12 +71,37 @@ class Dado(NamedModel):
         unique_together = (('indicador', 'localidade', 'ano'),)
 
 
-class Pipeline(models.Model):
-    nome = models.CharField(max_length=200)
-    filtros = models.TextField(null=True, blank=True)
-    transforms = models.TextField(u"Transformações", null=True, blank=True)
-    ordens = models.TextField(u'Ordenação', null=True, blank=True)
+class Dashboard(models.Model):
+    titulo = models.CharField(max_length=250)
+    descricao = models.TextField(u"Descrição")
+    ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
+    icone = IconField()
+
+    def __unicode__(self):
+        return self.titulo
 
 
+class Modelo(NamedModel):
+    html = models.TextField()
+    css = models.TextField()
+    js = models.TextField()
+    last_update = models.DateTimeField(auto_now=True)
 
+
+class Painel(models.Model):
+    dashboard = models.ForeignKey(Dashboard)
+    icone = IconField()
+    titulo = models.CharField(max_length=250)
+    ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
+    css_class = models.TextField(default='col-lg-12')
+    indicadores = models.ManyToManyField(Indicador)
+    localidades = models.ManyToManyField(Localidade)
+    periodos = models.CharField(max_length=250, blank=True, null=True, validators=[validate_comma_separated_integer_list])
+    modelo = models.ForeignKey(Modelo)
+
+    def __unicode__(self):
+        return self.titulo
+
+    class Meta:
+        ordering = ('ordem',)
 
