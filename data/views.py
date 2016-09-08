@@ -4,11 +4,16 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
-from data.models import Tema, Indicador
+from data.models import Tema, Indicador, Dashboard
 
 
 class Home(TemplateView):
-    template_name = 'home.html'
+    template_name = 'dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        d = super(Home, self).get_context_data(**kwargs)
+        d['dashboard'] = Dashboard.objects.first()
+        return d
 
 
 class TemaList(ListView):

@@ -1,4 +1,5 @@
 from django import template
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -44,3 +45,8 @@ def chunks(iterable, chunk_size):
             # some items will remain which haven't been yielded yet,
             # unless len(iterable) is divisible by chunk_size
             yield chunk
+
+
+@register.simple_tag(takes_context=True)
+def render_panel(context, painel):
+    return mark_safe(painel.modelo.render(context))

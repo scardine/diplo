@@ -1,17 +1,19 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.template import Template, Context
+
+from django.utils.encoding import python_2_unicode_compatible
+
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django_pandas.io import read_frame
 from fontawesome.fields import IconField
 
 
+@python_2_unicode_compatible
 class NamedModel(models.Model):
     nome = models.CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.nome
 
     def __str__(self):
         return self.nome
@@ -71,14 +73,18 @@ class Dado(NamedModel):
         unique_together = (('indicador', 'localidade', 'ano'),)
 
 
+@python_2_unicode_compatible
 class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
     icone = IconField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.titulo
+
+    class Meta:
+        ordering = ('ordem',)
 
 
 class Modelo(NamedModel):
@@ -87,7 +93,13 @@ class Modelo(NamedModel):
     js = models.TextField()
     last_update = models.DateTimeField(auto_now=True)
 
+    def render(self, context):
+        t = Template(self.html)
+        context['object'] = self
+        return t.render(context)
 
+
+@python_2_unicode_compatible
 class Painel(models.Model):
     dashboard = models.ForeignKey(Dashboard)
     icone = IconField()
@@ -99,7 +111,7 @@ class Painel(models.Model):
     periodos = models.CharField(max_length=250, blank=True, null=True, validators=[validate_comma_separated_integer_list])
     modelo = models.ForeignKey(Modelo)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.titulo
 
     class Meta:

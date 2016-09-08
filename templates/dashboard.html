@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load diplo %}
+
+{% block content %}
+<h1>{{ dashboard.titulo }}</h1>
+    <div class="row">
+        {% for painel in dashboard.painel_set.all %}
+            {% render_panel painel %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -21,7 +21,7 @@ class PainelInline(SortableInlineAdminMixin, admin.StackedInline):
     model = Painel
 
 
-class DashboardAdmin(admin.ModelAdmin):
+class DashboardAdmin(SortableAdminMixin, admin.ModelAdmin):
     inlines = (PainelInline,)
     search_fields = ('titulo',)
 
