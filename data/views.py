@@ -4,7 +4,9 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
-from data.models import Tema, Indicador, Dashboard
+
+from data.forms import TemaLocalForm
+from data.models import Tema, Indicador, Dashboard, Localidade
 
 
 class Home(TemplateView):
@@ -12,6 +14,9 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Home, self).get_context_data(**kwargs)
+        d['tema'] = get_object_or_404(Tema, pk=kwargs['tema'])
+        d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
+        d['form'] = TemaLocalForm(self.kwargs)
         d['dashboard'] = Dashboard.objects.first()
         return d
 

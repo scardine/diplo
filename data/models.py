@@ -30,6 +30,7 @@ class Fonte(NamedModel):
 class Tema(NamedModel):
     descricao = models.TextField(null=True, blank=True)
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
+    dashboard = models.BooleanField(u'Exibir no menu de dashboards?', default=False)
 
     class Meta:
         ordering = ('ordem', 'nome')
@@ -37,11 +38,11 @@ class Tema(NamedModel):
 
 class Localidade(NamedModel):
     TIPO = (
-        ('uf', u'Estado'),
+        ('uf', u'Estado de São Paulo'),
         ('regsau', u'Regiões de Saúde'),
         ('drs', u'Departamentos Regionais de Saúde'),
         ('rras', u'Redes Regionais de Atenção à Saúde'),
-        ('munic', u'Município'),
+        ('munic', u'Municípios Paulistas'),
     )
     codigo = models.CharField(max_length=30, blank=True, null=True)
     sublocalidades = models.ManyToManyField('self')
