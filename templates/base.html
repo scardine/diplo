@@ -25,6 +25,7 @@
     <![endif]-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 </head>
@@ -38,22 +39,44 @@
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="{% url 'home' %}">
-                        <img src="{% static 'img/logo.svg' %}" alt="logo" style="height: 3em">
+                        <img src="{% static 'img/logomarca.svg' %}" alt="logo" class="img-responsive">
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'home' %}">
+                        <i class="fa fa-dashboard"></i>
+                        Dashboards</a>
                 </li>
                 <li>
-                    <a href="{% url 'tema-list' %}">Dados</a>
+                    <a href="{% url 'tema-list' %}">
+                        <i class="fa fa-map"></i>
+                        Mapas</a>
+                </li>
+                <li>
+                    <a href="{% url 'tema-list' %}">
+                        <i class="fa fa-table"></i>
+                        Dados</a>
                 </li>
                 {% if request.user.is_authenticated %}
                 <li>
-                    <a href="{% url 'admin:index' %}">Administração</a>
+                    <a href="{% url 'admin:index' %}" target="_blank">
+                        <i class="fa fa-cog"></i>
+                        Administração</a>
+                </li>
+                <li>
+                    <a href="{% url 'admin:logout' %}?next={{ request.path }}">
+                        <i class="fa fa-lock"></i>
+                        Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'admin:login' %}?next={{ request.path }}">
+                        <i class="fa fa-unlock"></i>
+                        Login</a>
                 </li>
                 {% endif %}
             </ul>
-            <a href="" class="btn btn-sm menu-toggle right" aria-hidden="true"><i class="fa fa-chevron-left"></i></a>
+            <a href="" class="btn btn-xs menu-toggle right" aria-hidden="true"><i class="fa fa-chevron-left"></i></a>
         </div>
         <!-- /#sidebar-wrapper -->
 
@@ -65,7 +88,9 @@
                         {% block breadcrumbs %}
                         <ol class="breadcrumb">
                             {% block crumbs %}
-                                <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="active"><a href="{% url 'home' %}">
+                                    <i class="fa fa-dashboard"></i>
+                                    Dashboards</a></li>
                             {% endblock %}
                         </ol>
                         {% endblock %}
@@ -76,15 +101,15 @@
         </div>
         <!-- /#page-content-wrapper -->
 
-        <a href="" class="btn btn-sm menu-toggle left" aria-hidden="true"><i class="fa fa-chevron-right"></i></a>
+        <a href="" class="btn btn-xs menu-toggle left" aria-hidden="true"><i class="fa fa-chevron-right"></i></a>
     </div>
     <!-- /#wrapper -->
 
     <!-- jQuery -->
     {% bootstrap_javascript jquery=1 %}
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- Fallback for Bootstrap Core JavaScript -->
+    <script>$.fn.modal || document.write('<script src="{% static "js/bootstrap.min.js" %}">\x3C/script>')</script>
 
     <!-- Menu Toggle Script -->
     <script>

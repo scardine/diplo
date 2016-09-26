@@ -107,6 +107,7 @@ table.dataframe tbody tr td:not(:first-child) {
 /* Sidebar Styles */
 
 .sidebar-nav {
+    font-family: Oswald, sans-serif;
     position: absolute;
     top: 0;
     width: 250px;

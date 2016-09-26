@@ -5,10 +5,12 @@
  */
 
 $menu-foreground: #999999;
+$dark-background: #37a2d6;
 $menu-foreground-hover: #ffffff;
 $menu-background: #ffffff;
-$menu-background-hover: #37a2d6;
+$menu-background-hover: $dark-background;
 $width: 250px;
+$borda-menu: 1px dotted $menu-foreground;
 
 #wrapper {
   a.menu-toggle {
@@ -28,7 +30,7 @@ $width: 250px;
 }
 
 .sidebar-nav a {
-  border-bottom: 1px dotted $menu-foreground;
+  border-bottom: $borda-menu;
 }
 
 body {
@@ -62,6 +64,7 @@ body {
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  border-right: $borda-menu;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -82,6 +85,7 @@ body {
 /* Sidebar Styles */
 
 .sidebar-nav {
+  font-family: Oswald, sans-serif;
   position: absolute;
   top: 0;
   width: $width;
@@ -155,3 +159,42 @@ body {
   }
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: Oswald, sans-serif;
+}
+
+.breadcrumb {
+  font-family: Oswald, sans-serif;
+  background-color: $dark-background;
+  border: 0px solid white;
+  border-radius: 0;
+  display: block;
+  li {
+    font-size: 14px;
+  }
+  a {
+    color: white;
+    &:hover {
+      color: rgba(219, 238, 255, 1);
+    }
+  }
+  &>li+li:before {
+    color: rgba(204, 204, 204, 1);
+    content: "\276F\00a0";
+  }
+}
+.panel-primary {
+  border-color: $dark-background;
+  border-radius: 0;
+  & > .panel-heading {
+    background-color: $dark-background;
+    border-color: $dark-background;
+  }
+}
+.btn {
+  border-radius: 0;
+  .btn-primary {
+    background-color: $dark-background;
+    border-color: $dark-background;
+  }
+}

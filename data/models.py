@@ -37,9 +37,11 @@ class Tema(NamedModel):
 
 class Localidade(NamedModel):
     TIPO = (
-        ('estado', u'Estado'),
-        ('regiao', u'Região'),
-        ('municipio', u'Município'),
+        ('uf', u'Estado'),
+        ('regsau', u'Regiões de Saúde'),
+        ('drs', u'Departamentos Regionais de Saúde'),
+        ('rras', u'Redes Regionais de Atenção à Saúde'),
+        ('munic', u'Município'),
     )
     codigo = models.CharField(max_length=30, blank=True, null=True)
     sublocalidades = models.ManyToManyField('self')
