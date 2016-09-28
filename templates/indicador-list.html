@@ -1,37 +1,50 @@
 {% extends 'base.html' %}
 {% load diplo %}
+{% load bootstrap3 %}
 
 {% block crumbs %}
     {% with tema=object_list.first.tema %}
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'tema-list' %}">Dados</a></li>
-        <li class="active"><a href="{% url 'indicador-list' tema=object_list.first.tema.pk %}">{{ tema.nome }}: indicadores</a></li>
+        <li><a href="{% url 'indicador-list' tema=tema.pk %}">Dados</a></li>
+        <li class="active"><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}: indicadores</a></li>
     {% endwith %}
 {% endblock %}
 
 {% block content %}
-<h1><small>Tema:</small> {{ object_list.first.tema }}</h1>
-<h3>Escolha um indicador:</h3>
-<div class="row equal">
-    {% for object in object_list %}
-    <div class="col-md-6 col-lg-4">
-        <div class="panel panel-default panel-responsive">
-          <div class="panel-heading">
-            <h3 class="panel-title">{{ object.nome }}</h3>
-          </div>
-          <div class="panel-body">
-              {% if object.descricao %}
-                  <p>{{ object.descricao }}</p>
-              {% endif %}
-              <p><b>Fontes:</b> {% for fonte in object.fonte_set.all %}
-                  {{ fonte.nome }}
-              {% endfor %}
-              </p>
-              <p><b>Período:</b> {{ object.periodo|compacta }}</p>
-              <a class="btn btn-primary pull-right" href="{% url 'indicador-detail' tema=object.tema_id pk=object.pk %}">Ver</a>
-          </div>
+    <script>
+        function recarrega(el) {
+            window.location = '/tema/' + $('#id_tema').val() + '/';
+        }
+    </script>
+    <form id="form_tema" action="" class="form form-horizontal">
+        <div class="row">
+            {% bootstrap_field form.tema layout='horizontal' form_group_class='form-group col-lg-6' %}
         </div>
+    </form>
+
+    <h1><small>Tema:</small> {{ object_list.first.tema }}</h1>
+    <h3>Escolha um indicador:</h3>
+
+    <div class="row equal">
+        {% for object in object_list %}
+        <div class="col-md-6 col-lg-4">
+            <div class="panel panel-default panel-responsive">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{ object.nome }}</h3>
+              </div>
+              <div class="panel-body">
+                  {% if object.descricao %}
+                      <p>{{ object.descricao }}</p>
+                  {% endif %}
+                  <p><b>Fontes:</b> {% for fonte in object.fonte_set.all %}
+                      {{ fonte.nome }}
+                  {% endfor %}
+                  </p>
+                  <p><b>Período:</b> {{ object.periodo|compacta }}</p>
+                  <a class="btn btn-primary pull-right" href="{% url 'indicador-detail' tema=object.tema_id pk=object.pk %}">Ver</a>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

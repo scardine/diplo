@@ -4,7 +4,7 @@
 {% block crumbs %}
     {% with tema=object.tema %}
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'tema-list' %}">Dados</a></li>
+        <li><a href="{% url 'indicador-list' tema='' %}">Dados</a></li>
         <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
         <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
     {% endwith %}

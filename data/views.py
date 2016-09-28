@@ -29,9 +29,25 @@ class TemaList(ListView):
 class IndicadorList(ListView):
     template_name = 'indicador-list.html'
 
+    def get_tema(self):
+        try:
+            return self._tema
+        except AttributeError:
+            pass
+        if self.kwargs['tema']:
+            self._tema = get_object_or_404(Tema, pk=self.kwargs.get('tema'))
+        else:
+            self._tema = Tema.objects.first()
+        return self._tema
+
     def get_queryset(self):
-        tema = get_object_or_404(Tema, pk=self.kwargs.get('tema'))
-        return tema.indicador_set.all()
+        return self.get_tema().indicador_set.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorList, self).get_context_data(**kwargs)
+        d['tema'] = self.get_tema()
+        d['form'] = TemaLocalForm(self.kwargs)
+        return d
 
 
 class IndicadorDetail(DetailView):
