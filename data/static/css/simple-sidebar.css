@@ -1,4 +1,4 @@
-/*
+/*!
  * Start Bootstrap - Simple Sidebar (http://startbootstrap.com/)
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
@@ -39,7 +39,7 @@ body {
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
-  background: white;
+  background: #ffffff;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -79,7 +79,7 @@ body {
 
 .sidebar-nav li a:hover {
   text-decoration: none;
-  color: white;
+  color: #ffffff;
   background: #37a2d6; }
 
 .sidebar-nav li a:active,
@@ -95,7 +95,7 @@ body {
   color: #999999; }
 
 .sidebar-nav > .sidebar-brand a:hover {
-  color: white;
+  color: #ffffff;
   background: none; }
 
 @media (min-width: 768px) {
@@ -149,3 +149,14 @@ h1, h2, h3, h4, h5, h6 {
   .btn .btn-primary {
     background-color: #37a2d6;
     border-color: #37a2d6; }
+
+.dataframe tr td {
+  text-align: right; }
+.dataframe tr th {
+  text-align: right; }
+.dataframe tr td:first-child {
+  text-align: left; }
+.dataframe tr th:first-child {
+  text-align: left; }
+
+/*# sourceMappingURL=simple-sidebar.css.map */

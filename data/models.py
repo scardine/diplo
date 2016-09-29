@@ -8,7 +8,10 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django_pandas.io import read_frame
+import pandas as pd
+
 from fontawesome.fields import IconField
+from unidecode import unidecode
 
 
 @python_2_unicode_compatible
@@ -59,8 +62,10 @@ class Indicador(NamedModel):
     class Meta:
         verbose_name_plural = u"Indicadores"
 
-    def dados(self):
-        return read_frame(self.dado_set.all()).pivot(index='localidade', columns='ano', values='valor')
+    def dados(self, regionalizacao='munic'):
+        df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
+        df['_'] = df.index.map(unidecode)
+        return df.sort_values(by='_').drop(labels=['_'], axis=1)
 
     def dados_html(self):
         return self.dados().to_html(classes=['table', 'table-striped'])

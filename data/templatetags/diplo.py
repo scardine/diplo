@@ -1,5 +1,7 @@
 from django import template
 from django.utils.safestring import mark_safe
+from django_pandas.io import read_frame
+from unidecode import unidecode
 
 register = template.Library()
 
@@ -50,3 +52,11 @@ def chunks(iterable, chunk_size):
 @register.simple_tag(takes_context=True)
 def render_panel(context, painel):
     return mark_safe(painel.modelo.render(context))
+
+
+@register.filter
+def get_data(self, regionalizacao='munic'):
+    df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
+    df['_'] = df.index.map(unidecode)
+    return df.sort_values(by='_').drop(labels=['_'], axis=1).to_html(classes=['table', 'table-striped']).replace('border="1"', '')
+

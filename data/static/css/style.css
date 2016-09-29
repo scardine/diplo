@@ -116,3 +116,9 @@ table.dataframe tbody tr td:not(:first-child) {
     list-style: none;
 }
 
+.dataframe tr td {
+    text-align: right;
+}
+.dataframe tr td:first-child {
+    text-align: left;
+}

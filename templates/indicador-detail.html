@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load diplo %}
+{% load bootstrap3 %}
 
 {% block crumbs %}
     {% with tema=object.tema %}
@@ -11,8 +12,19 @@
 {% endblock %}
 
 {% block content %}
+    <script>
+        function recarrega(el) {
+            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
+        }
+    </script>
+    <form id="form_tema" action="" class="form form-horizontal">
+        <div class="row">
+            {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-12' %}
+        </div>
+    </form>
+
     <h1><small>{{ object.tema }}:</small> {{ object.nome }}</h1>
     <div>
-        {{ object.dados_html|safe }}
+        {{ object|get_data:regionalizacao|safe }}
     </div>
 {% endblock %}

@@ -37,7 +37,7 @@ class IndicadorList(ListView):
         if self.kwargs['tema']:
             self._tema = get_object_or_404(Tema, pk=self.kwargs.get('tema'))
         else:
-            self._tema = Tema.objects.first()
+            self._tema = Tema.objects.filter(dashboard=True).first()
         return self._tema
 
     def get_queryset(self):
@@ -46,10 +46,17 @@ class IndicadorList(ListView):
     def get_context_data(self, **kwargs):
         d = super(IndicadorList, self).get_context_data(**kwargs)
         d['tema'] = self.get_tema()
-        d['form'] = TemaLocalForm(self.kwargs)
+        d['form'] = TemaLocalForm(initial={'tema': d.get('tema')})
         return d
 
 
 class IndicadorDetail(DetailView):
     template_name = 'indicador-detail.html'
     queryset = Indicador.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorDetail, self).get_context_data(**kwargs)
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        return d
+
