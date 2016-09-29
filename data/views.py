@@ -14,9 +14,12 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Home, self).get_context_data(**kwargs)
-        d['tema'] = get_object_or_404(Tema, pk=kwargs['tema'])
+        if kwargs['tema']:
+            d['tema'] = get_object_or_404(Tema, pk=kwargs['tema'])
+        else:
+            d['tema'] = Tema.objects.filter(dashboard=True).first()
         d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
-        d['form'] = TemaLocalForm(self.kwargs)
+        d['form'] = TemaLocalForm(initial={'tema': d['tema'].pk})
         d['dashboard'] = Dashboard.objects.first()
         return d
 

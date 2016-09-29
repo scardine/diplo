@@ -23,7 +23,8 @@
         </div>
     </form>
 
-    <h1><small>{{ object.tema }}:</small> {{ object.nome }}</h1>
+    <h1 class="text-center"><small>{{ object.tema }}:</small>
+        <br> {{ object.nome }}</h1>
     <div>
         {{ object|get_data:regionalizacao|safe }}
     </div>

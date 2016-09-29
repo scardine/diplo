@@ -58,5 +58,5 @@ def render_panel(context, painel):
 def get_data(self, regionalizacao='munic'):
     df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
     df['_'] = df.index.map(unidecode)
-    return df.sort_values(by='_').drop(labels=['_'], axis=1).to_html(classes=['table', 'table-striped']).replace('border="1"', '')
+    return df.sort('_').drop(labels=['_'], axis=1).to_html(classes=['table', 'table-striped']).replace('border="1"', '')
 

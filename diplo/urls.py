@@ -19,7 +19,7 @@ from data import views as data_views
 
 
 urlpatterns = [
-    url(r'^$', data_views.Home.as_view(), name='home', kwargs={'tema': 16, 'localidades': 'munic'}),
+    url(r'^$', data_views.Home.as_view(), name='home', kwargs={'tema': '', 'localidades': 'munic'}),
     url(r'^dashboard/(?P<tema>\d+)/(?P<localidades>\w+)/$', data_views.Home.as_view(), name='home'),
     # url(r'^tema/$', data_views.TemaList.as_view(), name='tema-list'),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),
