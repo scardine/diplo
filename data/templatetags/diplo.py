@@ -1,6 +1,20 @@
 from django import template
+from django.utils.safestring import mark_safe
+from django_pandas.io import read_frame
+from unidecode import unidecode
 
 register = template.Library()
+
+
+def convert(v):
+    try:
+        return float(v)
+    except ValueError:
+        return v
+
+
+def convert_serie(s):
+    return [convert(_) for _ in s]
 
 
 @register.filter
@@ -44,3 +58,35 @@ def chunks(iterable, chunk_size):
             # some items will remain which haven't been yielded yet,
             # unless len(iterable) is divisible by chunk_size
             yield chunk
+
+
+@register.simple_tag(takes_context=True)
+def render_panel(context, painel):
+    return mark_safe(painel.modelo.render(context))
+
+
+@register.filter
+def get_data(self, regionalizacao='munic'):
+    return read_frame(self.dado_set.filter(localidade__tipo=regionalizacao))\
+        .pivot(index='localidade', columns='ano', values='valor')
+
+
+@register.filter
+def order_df(df, ordem='localidade'):
+    if ordem[0] == '-':
+        ordem = ordem[1:]
+        ascending = False
+    else:
+        ascending = True
+
+    if ordem == 'localidade':
+        df['_'] = df.index.map(unidecode)
+    else:
+        df['_'] = df[int(ordem)].map(convert)
+    return df.sort_values('_', ascending=ascending).drop(labels=['_'], axis=1)
+
+
+@register.filter
+def to_html(df):
+    return df.to_html(classes=['table', 'table-striped'], decimal=',').replace('border="1"', '')
+
