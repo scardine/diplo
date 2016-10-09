@@ -5,7 +5,7 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 
-from data.forms import TemaLocalForm
+from data.forms import TemaLocalForm, DashboardLocalForm
 from data.models import Tema, Indicador, Dashboard, Localidade
 
 
@@ -19,7 +19,7 @@ class Home(TemplateView):
         else:
             d['tema'] = Tema.objects.filter(dashboard=True).first()
         d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
-        d['form'] = TemaLocalForm(initial={'tema': d['tema'].pk})
+        d['form'] = DashboardLocalForm(initial={'tema': d['tema'].pk})
         d['dashboard'] = Dashboard.objects.first()
         return d
 
