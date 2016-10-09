@@ -17,7 +17,7 @@ class Home(TemplateView):
         if kwargs.get('dashboard'):
             d['dashboard'] = get_object_or_404(Dashboard, pk=kwargs['dashboard'])
         else:
-            d['dashboard'] = Dashboard.objects.filter(dashboard=True).first()
+            d['dashboard'] = Dashboard.objects.filter(publicado=True).first()
         d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
         d['form'] = DashboardLocalForm(initial={'dashboard': d['dashboard'].pk})
         return d

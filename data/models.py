@@ -59,6 +59,7 @@ class Indicador(NamedModel):
     formato = models.CharField(max_length=50, default='', blank=True)
     fonte = models.ForeignKey(Fonte)
     tema = models.ForeignKey(Tema)
+
     class Meta:
         verbose_name_plural = u"Indicadores"
 
@@ -86,6 +87,7 @@ class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
+    publicado = models.BooleanField(default=False)
     icone = IconField()
 
     def __str__(self):

@@ -10,5 +10,5 @@ class TemaLocalForm(forms.Form):
 
 
 class DashboardLocalForm(forms.Form):
-    dashboard = forms.ModelChoiceField(queryset=Dashboard.objects.all(), label=u'Painel temático', widget=forms.Select(attrs={"onchange":'recarrega(this)'}))
+    dashboard = forms.ModelChoiceField(queryset=Dashboard.objects.filter(publicado=True), label=u'Painel temático', widget=forms.Select(attrs={"onchange":'recarrega(this)'}))
     localidades = forms.ChoiceField(choices=Localidade.TIPO, label=u'Regionalização', widget=forms.Select(attrs={"onchange":'recarrega(this)'}))
