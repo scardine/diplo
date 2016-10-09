@@ -15,7 +15,7 @@
         </div>
     </form>
 
-    <h1 class="text-center">{{ tema.nome }} - {{ localidades.0.get_tipo_display }}</h1>
+    <h1 class="text-center">{{ dashboard.titulo }} - {{ localidades.0.get_tipo_display }}</h1>
     <div class="row">
         {% for painel in dashboard.painel_set.all %}
             {% render_panel painel %}
