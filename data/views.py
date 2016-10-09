@@ -14,12 +14,12 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Home, self).get_context_data(**kwargs)
+        d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
         if kwargs.get('dashboard'):
             d['dashboard'] = get_object_or_404(Dashboard, pk=kwargs['dashboard'])
         else:
             d['dashboard'] = Dashboard.objects.filter(publicado=True).first()
-        d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
-        d['form'] = DashboardLocalForm(initial={'dashboard': d['dashboard'].pk})
+        d['form'] = DashboardLocalForm(initial={'dashboard': d['dashboard'].pk, 'localidades': kwargs.get('localidades', 'munic')})
         return d
 
 
@@ -58,6 +58,18 @@ class IndicadorDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorDetail, self).get_context_data(**kwargs)
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        d['ordem'] = self.request.GET.get('o', 'localidade')
+        return d
+
+
+class IndicadorMap(DetailView):
+    template_name = 'indicador-detail-map.html'
+    queryset = Indicador.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorMap, self).get_context_data(**kwargs)
         d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')

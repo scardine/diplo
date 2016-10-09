@@ -24,6 +24,8 @@ urlpatterns = [
     # url(r'^tema/$', data_views.TemaList.as_view(), name='tema-list'),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),
     url(r'^tema/(?P<tema>\d+)/$', data_views.IndicadorList.as_view(), name='indicador-list'),
+    url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorMap.as_view(), name='indicador-detail'),
+    url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorMap.as_view(), name='indicador-detail'),
     url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
     url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
     url(r'^admin/', admin.site.urls),

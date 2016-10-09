@@ -56,7 +56,7 @@ class Indicador(NamedModel):
     descricao = models.TextField(u"Descrição", null=True, blank=True)
     observacao = models.TextField(u"Observações", null=True, blank=True)
     periodo = models.CharField(max_length=250, null=True, blank=True)
-    formato = models.CharField(max_length=50, default='', blank=True)
+    formato = models.CharField(max_length=50, default='', blank=True, help_text=u'Por exemplo: %0.3f formata com 3 casas depois da vírgula.')
     fonte = models.ForeignKey(Fonte)
     tema = models.ForeignKey(Tema)
 
