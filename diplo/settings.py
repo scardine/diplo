@@ -126,5 +126,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/app/diplo/static'
-
 from local_settings import *

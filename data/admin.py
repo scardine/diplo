@@ -40,4 +40,3 @@ admin.site.register(Indicador, IndicadorAdmin)
 admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Modelo)
 admin.site.register(Localidade, LocalidadeAdmin)
-

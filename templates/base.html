@@ -23,9 +23,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 </head>
@@ -102,7 +99,6 @@
         <a href="" class="btn btn-xs menu-toggle left" aria-hidden="true"><i class="fa fa-chevron-right"></i></a>
     </div>
     <!-- /#wrapper -->
-
     <!-- jQuery -->
     {% bootstrap_javascript jquery=1 %}
 
@@ -116,6 +112,15 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ['Open Sans', 'Lato', 'Oswald']
+        }
+      });
+    </script>
+{% block js %}{% endblock %}
 
 </body>
 

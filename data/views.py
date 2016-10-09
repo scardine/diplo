@@ -61,5 +61,6 @@ class IndicadorDetail(DetailView):
         d = super(IndicadorDetail, self).get_context_data(**kwargs)
         d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
 

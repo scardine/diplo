@@ -124,4 +124,3 @@ class Painel(models.Model):
 
     class Meta:
         ordering = ('ordem',)
-
