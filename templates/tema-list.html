@@ -2,30 +2,28 @@
 
 {% block crumbs %}
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active"><a href="{% url 'tema-list' %}">Temas</a></li>
+    <li class="active"><a href="{% url 'tema-list' %}">Dados</a></li>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-    <h1>Escolha um tema:</h1>
-        <div class="row equal">
-            {% for object in object_list %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="panel panel-default panel-responsive">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ object.nome|truncatewords:3 }}</h3>
-                        </div>
-                        <div class="panel-body">
-                            <p>{{ object.nome }}: {{ object.descricao|default:"Descrição não cadastrada" }}</p>
-                            {% with object.indicador_set.count as total %}
-                                <a class="btn btn-primary pull-right{% if not total %} disabled{% endif %}" href="{% url 'indicador-list' tema=object.pk %}">
-                                    {{ total }} indicador{{ total|pluralize:'es' }}
-                                </a>
-                            {% endwith %}
-                        </div>
+<h1>Escolha um tema:</h1>
+    <div class="row equal">
+        {% for object in object_list %}
+            <div class="col-md-6 col-lg-4">
+                <div class="panel panel-default panel-responsive">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-table"></i> {{ object.nome|truncatewords:3 }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{ object.nome }}: {{ object.descricao|default:"Descrição não cadastrada" }}</p>
+                        {% with object.indicador_set.count as total %}
+                            <a class="btn btn-primary pull-right{% if not total %} disabled{% endif %}" href="{% url 'indicador-list' tema=object.pk %}">
+                                {{ total }} indicador{{ total|pluralize:'es' }}
+                            </a>
+                        {% endwith %}
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

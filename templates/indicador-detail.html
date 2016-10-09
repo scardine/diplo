@@ -1,20 +1,88 @@
 {% extends 'base.html' %}
 {% load diplo %}
+{% load bootstrap3 %}
 
 {% block crumbs %}
     {% with tema=object.tema %}
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'tema-list' %}">Temas</a></li>
+        <li><a href="{% url 'indicador-list' tema='' %}">Dados</a></li>
         <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
         <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
     {% endwith %}
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1><small>{{ object.tema }}:</small> {{ object.nome }}</h1>
-        <div>
-            {{ object.dados_html|safe }}
+    <script>
+        function recarrega(el) {
+            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
+        }
+    </script>
+    <form id="form_tema" action="" class="form form-horizontal">
+        <div class="row">
+            {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-12' %}
         </div>
+    </form>
+
+    <h1 class="text-center"><small>{{ object.tema }}:</small>
+        <br> {{ object.nome }}</h1>
+    <div id="data-table-container">
+        {{ object|get_data:regionalizacao|order_df:ordem|to_html|safe }}
     </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    (function() {
+        var order = '{{ ordem|escapejs }}';
+        var ascending = true;
+        var row = $('#data-table-container').find('table tr');
+
+        if (order[0] == '-') {
+            ascending = false;
+            order = order.replace('-', '');
+        }
+
+
+        $(row[0]).find('th').each(function (i) {
+            if (i == 0) return true;
+            var ano = $(this).text();
+            if (ano == order) {
+                if (ascending) {
+                    $(this).addClass('ascending').removeClass('descending').html(
+                            $('<a href="" onclick="return order_by(\'-'+$(this).text()+'\')">'+$(this).text()+' <i class="fa fa-long-arrow-down"></i></a>')
+                    );
+                } else {
+                    $(this).addClass('descending').removeClass('ascending').html(
+                            $('<a href="" onclick="return order_by(\'' + $(this).text() + '\')">'+$(this).text()+' <i class="fa fa-long-arrow-up"></i></a>')
+                    );
+                }
+            } else {
+                $(this).removeClass('descending ascending').html(
+                   $('<a href="" onclick="return order_by('+$(this).text()+')">'+$(this).text()+'</a>')
+                );
+            }
+        });
+        if (order == 'localidade') {
+            if (ascending) {
+                $(row[1]).find('th').first().addClass('descending').removeClass('ascending').html(
+                    $('<a href="" onclick="return order_by(\'-localidade\')">localidade <i class="fa fa-long-arrow-down"></i></a>')
+                );
+            } else {
+                $(row[1]).find('th').first().addClass('ascending').removeClass('descending').html(
+                        $('<a href="" onclick="return order_by(\'localidade\')">localidade <i class="fa fa-long-arrow-up"></i></a>')
+                );
+            }
+        } else {
+            $(row[1]).find('th').first().removeClass('descending ascending').html(
+                    $('<a href="" onclick="return order_by(\'localidade\')">localidade</a>')
+            );
+        }
+    })();
+    function order_by(order) {
+        var path = '{{ request.path|escapejs }}';
+        window.location = path + '?o=' + order;
+        return false;
+    }
+
+    </script>
 {% endblock %}
