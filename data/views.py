@@ -14,13 +14,12 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Home, self).get_context_data(**kwargs)
-        if kwargs['tema']:
-            d['tema'] = get_object_or_404(Tema, pk=kwargs['tema'])
+        if kwargs.get('dashboard'):
+            d['dashboard'] = get_object_or_404(Dashboard, pk=kwargs['dashboard'])
         else:
-            d['tema'] = Tema.objects.filter(dashboard=True).first()
+            d['dashboard'] = Dashboard.objects.filter(dashboard=True).first()
         d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
-        d['form'] = DashboardLocalForm(initial={'tema': d['tema'].pk})
-        d['dashboard'] = Dashboard.objects.first()
+        d['form'] = DashboardLocalForm(initial={'dashboard': d['dashboard'].pk})
         return d
 
 
