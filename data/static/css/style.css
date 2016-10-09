@@ -1,0 +1,124 @@
+/*
+body {
+    padding-top: 70px;
+    font-family: "Open Sans", Helvetica, Sans-Serif, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: Lato, Helvetica, Sans-Serif, sans-serif;
+}
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+.equal, .equal > div[class*='col-'] {
+    display: -webkit-flex;
+    display: flex;
+    flex:1 1 auto;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-align-content: flex-end;
+    align-content: flex-end;
+}
+.panel-responsive {
+    width: 100%;
+}
+table.dataframe tbody tr td:not(:first-child) {
+    text-align: right;
+}
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:25px !important; padding-bottom:25px !important;
+    height: 70px;
+}
+.navbar {min-height:30px !important;}
+.navbar-main {
+    background-color:#37a2d6;
+    color:#ffffff;
+    border-radius:0;
+}
+.navbar-main .navbar-nav > li > a {
+    color:#fff;
+}
+.navbar-main .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color:transparent;
+}
+.navbar-main .navbar-brand {
+    color:#eeeeee;
+}
+.navbar-main .navbar-nav > li > a:hover, .nav > li > a:focus { text-decoration: none; background-color: #2792c6; }
+.icon {
+    font-family: "Material Icons", monospace;
+}
+
+/*!
+ * Start Bootstrap - Simple Sidebar (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+ body {
+    overflow-x: hidden;
+ }
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #000;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    font-family: Oswald, sans-serif;
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dataframe tr td {
+    text-align: right;
+}
+.dataframe tr td:first-child {
+    text-align: left;
+}
