@@ -47,12 +47,12 @@
                 "data": [
                     {
                         "name": "unemp",
-                        "url": "http://vega.github.io/data/unemployment.tsv",
+                        "url": "http://vega.github.io/vega-editor/app/data/unemployment.tsv",
                         "format": {"type": "tsv", "parse": "auto"}
                     },
                     {
                         "name": "counties",
-                        "url": "http://vega.github.io/data/us-10m.json",
+                        "url": "http://vega.github.io/vega-editor/app/data/us-10m.json",
                         "format": {"type": "topojson", "feature": "counties"},
                         "transform": [
                             {"type": "geopath", "projection": "albersUsa"},
@@ -88,7 +88,9 @@
                     }
                 ]
             };
-            vg.parse.spec(spec, function(error, chart) { chart({el:"#vis"}).update(); });
+            vg.parse.spec(spec, function(error, chart) {
+                chart({el:"#vis"}).update();
+            });
         });
 
     </script>

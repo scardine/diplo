@@ -159,4 +159,9 @@ h1, h2, h3, h4, h5, h6 {
 .dataframe tr th:first-child {
   text-align: left; }
 
+#vis .vega {
+  text-align: center; }
+  #vis .vega canvas {
+    margin: 0 auto; }
+
 /*# sourceMappingURL=simple-sidebar.css.map */

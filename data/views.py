@@ -52,6 +52,10 @@ class IndicadorList(ListView):
         return d
 
 
+class IndicadorMapList(IndicadorList):
+    template_name = 'indicador-map-list.html'
+
+
 class IndicadorDetail(DetailView):
     template_name = 'indicador-detail.html'
     queryset = Indicador.objects.all()

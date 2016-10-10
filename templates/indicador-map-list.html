@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load diplo %}
+{% load bootstrap3 %}
+
+{% block crumbs %}
+    {% with tema=object_list.first.tema %}
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'indicador-map-list' tema=tema.pk %}">Mapas</a></li>
+        <li class="active"><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}: indicadores</a></li>
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <script>
+        function recarrega(el) {
+            window.location = '/tema/mapa/' + $('#id_tema').val() + '/';
+        }
+    </script>
+    <form id="form_tema" action="" class="form form-horizontal">
+        <div class="row">
+            {% bootstrap_field form.tema layout='horizontal' form_group_class='form-group col-lg-12' %}
+        </div>
+    </form>
+
+    <h1 class="text-center"><small>Tema:</small> {{ object_list.first.tema }}</h1>
+    <h3>Escolha um indicador:</h3>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Indicador</th>
+            <th>Período</th>
+        </tr>
+        {% for object in object_list %}
+        <tr>
+            <td><a href="{% url 'indicador-map-detail' tema=object.tema_id pk=object.pk %}">{{ object.nome }}</a></td>
+            <td>{{ object.periodo|compacta }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
