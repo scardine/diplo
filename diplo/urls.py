@@ -19,12 +19,18 @@ from data import views as data_views
 
 
 urlpatterns = [
-    url(r'^$', data_views.Home.as_view(), name='home', kwargs={'tema': '', 'localidades': 'munic'}),
-    url(r'^dashboard/(?P<tema>\d+)/(?P<localidades>\w+)/$', data_views.Home.as_view(), name='home'),
+    url(r'^$', data_views.Home.as_view(), name='home', kwargs={'dashboard': '', 'localidades': 'munic'}),
+    url(r'^dashboard/(?P<dashboard>\d+)/(?P<localidades>\w+)/$', data_views.Home.as_view(), name='home'),
     # url(r'^tema/$', data_views.TemaList.as_view(), name='tema-list'),
+    url(r'^tema/mapa/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list', kwargs={'tema': ''}),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),
+    url(r'^tema/mapa/(?P<tema>\d+)/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list'),
     url(r'^tema/(?P<tema>\d+)/$', data_views.IndicadorList.as_view(), name='indicador-list'),
+    url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
+    url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
     url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
     url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
     url(r'^admin/', admin.site.urls),
 ]
+
+admin.site.site_header = 'Painel de Controle'

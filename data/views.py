@@ -5,7 +5,7 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 
-from data.forms import TemaLocalForm
+from data.forms import TemaLocalForm, DashboardLocalForm
 from data.models import Tema, Indicador, Dashboard, Localidade
 
 
@@ -14,13 +14,12 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Home, self).get_context_data(**kwargs)
-        if kwargs['tema']:
-            d['tema'] = get_object_or_404(Tema, pk=kwargs['tema'])
-        else:
-            d['tema'] = Tema.objects.filter(dashboard=True).first()
         d['localidades'] = Localidade.objects.filter(tipo=kwargs['localidades'])
-        d['form'] = TemaLocalForm(initial={'tema': d['tema'].pk})
-        d['dashboard'] = Dashboard.objects.first()
+        if kwargs.get('dashboard'):
+            d['dashboard'] = get_object_or_404(Dashboard, pk=kwargs['dashboard'])
+        else:
+            d['dashboard'] = Dashboard.objects.filter(publicado=True).first()
+        d['form'] = DashboardLocalForm(initial={'dashboard': d['dashboard'].pk, 'localidades': kwargs.get('localidades', 'munic')})
         return d
 
 
@@ -53,12 +52,28 @@ class IndicadorList(ListView):
         return d
 
 
+class IndicadorMapList(IndicadorList):
+    template_name = 'indicador-map-list.html'
+
+
 class IndicadorDetail(DetailView):
     template_name = 'indicador-detail.html'
     queryset = Indicador.objects.all()
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorDetail, self).get_context_data(**kwargs)
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        d['ordem'] = self.request.GET.get('o', 'localidade')
+        return d
+
+
+class IndicadorMap(DetailView):
+    template_name = 'indicador-detail-map.html'
+    queryset = Indicador.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorMap, self).get_context_data(**kwargs)
         d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')

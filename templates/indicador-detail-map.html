@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load diplo %}
+{% load bootstrap3 %}
+
+{% block crumbs %}
+    {% with tema=object.tema %}
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'indicador-list' tema='' %}">Dados</a></li>
+        <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
+        <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <script>
+        function recarrega(el) {
+            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
+        }
+    </script>
+    <form id="form_tema" action="" class="form form-horizontal">
+        <div class="row">
+            {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-12' %}
+        </div>
+    </form>
+
+    <h1 class="text-center">
+        <small>{{ object.tema }}:</small>
+        <br> {{ object.nome }}</h1>
+    <div id="data-table-container">
+        <div id="vis"></div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://vega.github.io/vega-editor/vendor/d3.min.js"></script>
+    <script src="https://vega.github.io/vega-editor/vendor/d3.geo.projection.min.js"></script>
+    <script src="https://vega.github.io/vega-editor/vendor/topojson.js"></script>
+    <script src="https://vega.github.io/vega-editor/vendor/d3.layout.cloud.js"></script>
+    <script src="https://vega.github.io/vega/vega.min.js"></script>
+
+    <script>
+        $(function () {
+            var dados = {{ object|get_data:regionalizacao|order_df:ordem|to_json|safe }};
+            var spec = {
+                "width": 960,
+                "height": 500,
+                "data": [
+                    {
+                        "name": "unemp",
+                        "url": "http://vega.github.io/vega-editor/app/data/unemployment.tsv",
+                        "format": {"type": "tsv", "parse": "auto"}
+                    },
+                    {
+                        "name": "counties",
+                        "url": "http://vega.github.io/vega-editor/app/data/us-10m.json",
+                        "format": {"type": "topojson", "feature": "counties"},
+                        "transform": [
+                            {"type": "geopath", "projection": "albersUsa"},
+                            {
+                                "type": "lookup", "on": "unemp", "onKey": "id",
+                                "keys": ["id"], "as": ["unemp"]
+                            },
+                            {
+                                "type": "filter",
+                                "test": "datum.layout_path!=null && datum.unemp!=null"
+                            }
+                        ]
+                    }
+                ],
+                "scales": [
+                    {
+                        "name": "color",
+                        "type": "quantize",
+                        "domain": [0, 0.15],
+                        "range": ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6",
+                            "#4292c6", "#2171b5", "#08519c", "#08306b"]
+                    }
+                ],
+                "marks": [
+                    {
+                        "type": "path",
+                        "from": {"data": "counties"},
+                        "properties": {
+                            "enter": {"path": {"field": "layout_path"}},
+                            "update": {"fill": {"scale": "color", "field": "unemp.rate"}},
+                            "hover": {"fill": {"value": "red"}}
+                        }
+                    }
+                ]
+            };
+            vg.parse.spec(spec, function(error, chart) {
+                chart({el:"#vis"}).update();
+            });
+        });
+
+    </script>
+{% endblock %}

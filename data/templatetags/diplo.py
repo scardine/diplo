@@ -2,6 +2,8 @@ from django import template
 from django.utils.safestring import mark_safe
 from django_pandas.io import read_frame
 from unidecode import unidecode
+import locale
+locale.setlocale(locale.LC_NUMERIC, '')
 
 register = template.Library()
 
@@ -87,6 +89,18 @@ def order_df(df, ordem='localidade'):
 
 
 @register.filter
-def to_html(df):
+def to_html(df, format=''):
+    if format:
+        def f(v):
+            try:
+                return locale.format_string(format, float(v), grouping=True)
+            except (ValueError, TypeError) as e:
+                return v
+        formatters = [f] * len(df.columns)
+        return df.to_html(classes=['table', 'table-striped'], formatters=formatters).replace('border="1"', '')
     return df.to_html(classes=['table', 'table-striped'], decimal=',').replace('border="1"', '')
 
+
+@register.filter
+def to_json(df):
+    return df.to_json()

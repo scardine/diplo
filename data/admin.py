@@ -15,7 +15,7 @@ class FonteAdmin(admin.ModelAdmin):
 class IndicadorAdmin(admin.ModelAdmin):
     list_display = ('nome', 'tema',)
     list_filter = ('tema',)
-    search_fields = ('nome', 'descricao', 'observacoes',)
+    search_fields = ('nome', 'descricao', 'observacao',)
     ordering = ('tema', 'nome',)
 
 
@@ -40,4 +40,3 @@ admin.site.register(Indicador, IndicadorAdmin)
 admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Modelo)
 admin.site.register(Localidade, LocalidadeAdmin)
-

@@ -5,17 +5,17 @@
 {% block content %}
     <script>
         function recarrega(el) {
-            window.location = '/dashboard/' + $('#id_tema').val() + '/' + $('#id_localidades').val() + '/';
+            window.location = '/dashboard/' + $('#id_dashboard').val() + '/' + $('#id_localidades').val() + '/';
         }
     </script>
     <form id="form_tema" action="" class="form form-horizontal">
         <div class="row">
-            {% bootstrap_field form.tema layout='horizontal' form_group_class='form-group col-lg-6' %}
+            {% bootstrap_field form.dashboard layout='horizontal' form_group_class='form-group col-lg-6' %}
             {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-6' %}
         </div>
     </form>
 
-    <h1 class="text-center">{{ tema.nome }} - {{ localidades.0.get_tipo_display }}</h1>
+    <h1 class="text-center">{{ dashboard.titulo }} - {{ localidades.0.get_tipo_display }}</h1>
     <div class="row">
         {% for painel in dashboard.painel_set.all %}
             {% render_panel painel %}

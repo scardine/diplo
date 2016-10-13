@@ -56,9 +56,10 @@ class Indicador(NamedModel):
     descricao = models.TextField(u"Descrição", null=True, blank=True)
     observacao = models.TextField(u"Observações", null=True, blank=True)
     periodo = models.CharField(max_length=250, null=True, blank=True)
-    formato = models.CharField(max_length=50, default='', blank=True)
+    formato = models.CharField(max_length=50, default='', blank=True, help_text=u'Por exemplo: %0.3f formata com 3 casas depois da vírgula.')
     fonte = models.ForeignKey(Fonte)
     tema = models.ForeignKey(Tema)
+
     class Meta:
         verbose_name_plural = u"Indicadores"
 
@@ -86,6 +87,7 @@ class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
+    publicado = models.BooleanField(default=False)
     icone = IconField()
 
     def __str__(self):
@@ -124,4 +126,3 @@ class Painel(models.Model):
 
     class Meta:
         ordering = ('ordem',)
-
