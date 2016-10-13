@@ -6,6 +6,17 @@ from unidecode import unidecode
 register = template.Library()
 
 
+def convert(v):
+    try:
+        return float(v)
+    except ValueError:
+        return v
+
+
+def convert_serie(s):
+    return [convert(_) for _ in s]
+
+
 @register.filter
 def compacta(periodo):
     periodos = list(sorted(int(_) for _ in periodo.split(',')))
@@ -56,7 +67,26 @@ def render_panel(context, painel):
 
 @register.filter
 def get_data(self, regionalizacao='munic'):
-    df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
-    df['_'] = df.index.map(unidecode)
-    return df.sort('_').drop(labels=['_'], axis=1).to_html(classes=['table', 'table-striped']).replace('border="1"', '')
+    return read_frame(self.dado_set.filter(localidade__tipo=regionalizacao))\
+        .pivot(index='localidade', columns='ano', values='valor')
+
+
+@register.filter
+def order_df(df, ordem='localidade'):
+    if ordem[0] == '-':
+        ordem = ordem[1:]
+        ascending = False
+    else:
+        ascending = True
+
+    if ordem == 'localidade':
+        df['_'] = df.index.map(unidecode)
+    else:
+        df['_'] = df[int(ordem)].map(convert)
+    return df.sort_values('_', ascending=ascending).drop(labels=['_'], axis=1)
+
+
+@register.filter
+def to_html(df):
+    return df.to_html(classes=['table', 'table-striped'], decimal=',').replace('border="1"', '')
 
