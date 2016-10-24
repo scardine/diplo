@@ -3,11 +3,11 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="ba819427-64e8-453c-b2b6-77d85dff0386" name="jasmil" url="http://www.homologa.net.br">
-        <fileTransfer host="www.homologa.net.br" port="2266" accessType="SFTP">
+        <fileTransfer host="www.homologa.net.br" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" accessType="SFTP" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
-          <option name="port" value="2266" />
+          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>
