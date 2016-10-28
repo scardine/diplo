@@ -1,4 +1,4 @@
-/*!
+/*
  * Start Bootstrap - Simple Sidebar (http://startbootstrap.com/)
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
@@ -39,7 +39,7 @@ body {
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
-  background: #ffffff;
+  background: white;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -79,7 +79,7 @@ body {
 
 .sidebar-nav li a:hover {
   text-decoration: none;
-  color: #ffffff;
+  color: white;
   background: #37a2d6; }
 
 .sidebar-nav li a:active,
@@ -95,7 +95,7 @@ body {
   color: #999999; }
 
 .sidebar-nav > .sidebar-brand a:hover {
-  color: #ffffff;
+  color: white;
   background: none; }
 
 @media (min-width: 768px) {
@@ -160,8 +160,9 @@ h1, h2, h3, h4, h5, h6 {
   text-align: left; }
 
 #vis .vega {
-  text-align: center; }
+  text-align: center;
+  width: 800px;
+  margin: auto;
+  overflow: hidden; }
   #vis .vega canvas {
     margin: 0 auto; }
-
-/*# sourceMappingURL=simple-sidebar.css.map */
