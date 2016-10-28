@@ -9,6 +9,10 @@ from data.forms import TemaLocalForm, DashboardLocalForm
 from data.models import Tema, Indicador, Dashboard, Localidade
 
 
+class Index(TemplateView):
+    template_name = 'index.html'
+
+
 class Home(TemplateView):
     template_name = 'dashboard.html'
 

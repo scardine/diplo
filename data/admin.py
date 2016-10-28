@@ -1,6 +1,9 @@
 from django.contrib import admin
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-from data.models import Fonte, Tema, Indicador, Dashboard, Painel, Modelo, Localidade
+from treebeard.admin import TreeAdmin
+from treebeard.forms import movenodeform_factory
+
+from data.models import Fonte, Tema, Indicador, Dashboard, Painel, Modelo, Localidade, Categoria
 
 
 class TemaAdmin(SortableAdminMixin, admin.ModelAdmin):
@@ -34,9 +37,14 @@ class LocalidadeAdmin(admin.ModelAdmin):
     list_filter = ('tipo',)
 
 
+class CategoriaAdmin(TreeAdmin):
+    form = movenodeform_factory(Categoria)
+
+
 admin.site.register(Tema, TemaAdmin)
 admin.site.register(Fonte, FonteAdmin)
 admin.site.register(Indicador, IndicadorAdmin)
 admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Modelo)
 admin.site.register(Localidade, LocalidadeAdmin)
+admin.site.register(Categoria, CategoriaAdmin)

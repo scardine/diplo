@@ -11,6 +11,7 @@ from django_pandas.io import read_frame
 import pandas as pd
 
 from fontawesome.fields import IconField
+from treebeard.mp_tree import MP_Node
 from unidecode import unidecode
 
 
@@ -59,6 +60,7 @@ class Indicador(NamedModel):
     formato = models.CharField(max_length=50, default='', blank=True, help_text=u'Por exemplo: %0.3f formata com 3 casas depois da vírgula.')
     fonte = models.ForeignKey(Fonte)
     tema = models.ForeignKey(Tema)
+    categoria = models.ForeignKey('Categoria', null=True)
 
     class Meta:
         verbose_name_plural = u"Indicadores"
@@ -126,3 +128,18 @@ class Painel(models.Model):
 
     class Meta:
         ordering = ('ordem',)
+
+
+@python_2_unicode_compatible
+class Categoria(MP_Node):
+    nome = models.CharField(max_length=300)
+    subtitulo = models.TextField(null=True, blank=True)
+    ordem = models.PositiveIntegerField(default=1)
+    home = models.BooleanField(u'Exibir card na homepage?', default=True)
+
+    node_order_by = ('ordem', 'nome')
+
+    def __str__(self):
+        return self.nome
+
+
