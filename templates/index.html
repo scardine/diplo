@@ -91,7 +91,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="./">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="../navbar/">Como usar</a></li>
-                <li><a href="../navbar-fixed-top/">Glossário</a></li>
+                <li><a href="{% url 'glossario' %}">Glossário</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -102,51 +102,27 @@
         <h1 class="text-center">Saúde em Dados</h1>
         <p class="text-center">Aqui vai um subtítulo</p>
         <div class="row cards">
-            <a href="" class="card col-lg-4 col-md-6 card-1">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-2">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-3">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
+            {% for categoria in categorias|slice:'0:6' %}
+                <a href="" class="card col-lg-4 col-md-6 card-{% cycle 1 2 3 4 5 6 %}">
+                    <h3>{{ categoria.nome }}</h3>
+                    <p>{{ categoria.subtitulo }}</p>
+                </a>
+            {% endfor %}
         </div>
+    </div>
+</div>
+{% if categorias|length > 6 %}
+    <div class="container">
         <div class="row">
-            <a href="" class="card col-lg-4 col-md-6 card-3">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-4">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-5">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
+            {% for categoria in categorias|slice:'6:' %}
+                <a href="" class="card col-lg-4 col-md-6 card-{% cycle 1 2 3 4 5 6 %}">
+                    <h3>{{ categoria.nome }}</h3>
+                    <p>{{ categoria.subtitulo }}</p>
+                </a>
+            {% endfor %}
         </div>
     </div>
-</div>
-<div class="container">
-    <div class="row">
-        <a href="" class="card col-lg-4 col-md-6 card-3">
-            <h3>Título</h3>
-            <p>Subtítulo da categoria</p>
-        </a>
-        <a href="" class="card col-lg-4 col-md-6 card-4">
-            <h3>Título</h3>
-            <p>Subtítulo da categoria</p>
-        </a>
-        <a href="" class="card col-lg-4 col-md-6 card-5">
-            <h3>Título</h3>
-            <p>Subtítulo da categoria</p>
-        </a>
-    </div>
-</div>
+{% endif %}
 <div class="container">
     <p class="text-center">Aqui vai o resto do conteúdo da home</p>
 </div>

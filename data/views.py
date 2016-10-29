@@ -6,11 +6,17 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
-from data.models import Tema, Indicador, Dashboard, Localidade
+from data.models import Tema, Indicador, Dashboard, Localidade, Categoria
 
 
 class Index(TemplateView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        d = super(Index, self).get_context_data(**kwargs)
+        d['categorias'] = Categoria.objects.filter(depth=1).order_by('ordem')
+        return d
+
 
 
 class Home(TemplateView):

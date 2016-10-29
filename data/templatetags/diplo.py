@@ -1,4 +1,5 @@
 from django import template
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django_pandas.io import read_frame
 from unidecode import unidecode
@@ -104,3 +105,13 @@ def to_html(df, format=''):
 @register.filter
 def to_json(df):
     return df.to_json()
+
+
+@register.simple_tag(takes_context=True)
+def static_page_link(context, url, label):
+    active = context['request'].path == url
+    context = context.flatten()
+    context['url'] = url
+    context['label'] = label
+    context['active'] = active
+    return mark_safe(render_to_string('static-page-link.html', context=context))
