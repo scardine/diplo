@@ -134,6 +134,7 @@ class Painel(models.Model):
 class Categoria(MP_Node):
     nome = models.CharField(max_length=300)
     subtitulo = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True)
     ordem = models.PositiveIntegerField(default=1)
     home = models.BooleanField(u'Exibir card na homepage?', default=True)
 

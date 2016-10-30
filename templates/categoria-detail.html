@@ -1,0 +1,45 @@
+{% extends 'index-base.html' %}
+
+{% block conteudo %}
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">Indicadores</a></li>
+            <li class="active">{{ object.nome }}</li>
+        </ol>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ object.nome }}
+                    </div>
+                    <div class="panel-body">
+                        <ul class="nav nav-pills nav-stacked">
+                            {% for subcategoria in object.get_children %}
+                                {% if subcategoria.is_leaf %}
+                                    <li><a >{{ subcategoria }}</a></li>
+                                {% else %}
+                                    <li class="btn btn-primary disabled">{{ subcategoria }}</li>
+                                    <li>
+                                        <ul class="nav nav-pills nav-stacked">
+                                            {% for subsubcategoria in subcategoria.get_children %}
+                                                <li><a>{{ subsubcategoria }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                    <h1 class="text-center">{{ object.nome }}</h1>
+                    <p class="text-center">{{ object.subtitulo }}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

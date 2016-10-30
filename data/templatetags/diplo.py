@@ -109,7 +109,11 @@ def to_json(df):
 
 @register.simple_tag(takes_context=True)
 def static_page_link(context, url, label):
-    active = context['request'].path == url
+    if url.endswith('$'):
+        url = url[:-1]
+        active = context['request'].path == url
+    else:
+        active = context['request'].path.startswith(url)
     context = context.flatten()
     context['url'] = url
     context['label'] = label
