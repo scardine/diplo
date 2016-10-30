@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 from django.views.generic import DetailView
@@ -78,4 +78,10 @@ class IndicadorMap(DetailView):
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
+
+
+class CategoriaDetail(DetailView):
+    template_name = 'categoria-detail.html'
+    queryset = Categoria.objects.all()
+
 

@@ -1,0 +1,29 @@
+{% extends 'index-base.html' %}
+{% load django_markdown %}
+{% block conteudo %}
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}#">Home</a></li>
+        <li><a href="{% url 'glossario' %}">Glossário</a></li>
+        <li class="active">{{ termo.termo }}</li>
+    </ol>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Glossário</h3>
+                    <ul class="nav nav-pills nav-stacked">
+                        {% for object in object_list %}
+                            <li{% if object.pk == termo.pk %} class="active"{% endif %}><a href="{% url 'glossario' slug_termo=object.slug %}">{{ object.termo }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <h1>{{ termo.termo }}</h1>
+            {{ termo.significado|markdown }}
+        </div>
+    </div>
+</div>
+{% endblock %}
