@@ -6,11 +6,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
-from data.models import Tema, Indicador, Dashboard, Localidade
-
-
-class Index(TemplateView):
-    template_name = 'index.html'
+from data.models import Tema, Indicador, Dashboard, Localidade, Categoria
 
 
 class Home(TemplateView):

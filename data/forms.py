@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import forms
 
-from data.models import Tema, Localidade
+from data.models import Tema, Localidade, Dashboard
 
 
 class TemaLocalForm(forms.Form):
