@@ -85,3 +85,6 @@ class CategoriaDetail(DetailView):
     queryset = Categoria.objects.all()
 
 
+class CategoriaList(ListView):
+    template_name = 'categoria-list.html'
+    queryset = Categoria.objects.all()
