@@ -14,7 +14,7 @@
 {% block content %}
     <script>
         function recarrega(el) {
-            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
+            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/dados/';
         }
     </script>
     <form id="form_tema" action="" class="form form-horizontal">
@@ -23,6 +23,11 @@
         </div>
     </form>
 
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#"><i class="fa fa-table"></i> Dados</a></li>
+        <li role="presentation"><a href=""><i class="fa fa-map"></i> Mapas</a></li>
+        <li role="presentation"><a href=""><i class="fa fa-bar-chart"></i> Gráficos</a></li>
+    </ul>
     <h1 class="text-center"><small>{{ object.tema }}:</small>
         <br> {{ object.nome }}</h1>
     <div id="data-table-container">

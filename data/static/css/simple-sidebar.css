@@ -14,7 +14,7 @@
 .sidebar-nav > .sidebar-brand a {
   border-bottom: none; }
 
-.sidebar-nav a {
+.sidebar-nav > li a, .sidebar-nav > li div {
   border-bottom: 1px dotted #999999; }
 
 body {

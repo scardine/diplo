@@ -29,7 +29,7 @@ $borda-menu: 1px dotted $menu-foreground;
   border-bottom: none;
 }
 
-.sidebar-nav a {
+.sidebar-nav > li a, .sidebar-nav > li div {
   border-bottom: $borda-menu;
 }
 
