@@ -1,31 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'indicador-detail-base.html' %}
 {% load diplo %}
 {% load bootstrap3 %}
+{% load static %}
 
-{% block crumbs %}
-    {% with tema=object.tema %}
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'indicador-list' tema='' %}">Dados</a></li>
-        <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
-        <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
-    {% endwith %}
-{% endblock %}
+{% block dados %}{% endblock %}
+{% block tipo %}mapa{% endblock %}
+{% block mapa %} class="active"{% endblock %}
 
 {% block content %}
-    <script>
-        function recarrega(el) {
-            window.location = '/tema/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
-        }
-    </script>
-    <form id="form_tema" action="" class="form form-horizontal">
-        <div class="row">
-            {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-12' %}
-        </div>
-    </form>
-
-    <h1 class="text-center">
-        <small>{{ object.tema }}:</small>
-        <br> {{ object.nome }}</h1>
+    {{ block.super }}
     <div id="data-table-container">
         <div id="vis"></div>
     </div>
@@ -63,8 +46,8 @@
                     },
                     {
                         "name": "mun",
-                        "url": "/static/geo/mun.topojson.json",
-                        "format": {"type": "topojson", "feature": "mun"},
+                        "url": "/static/geo/{{ regionalizacao }}.topojson.json",
+                        "format": {"type": "topojson", "feature": "{{ regionalizacao }}"},
                         "transform": [
                             {
                                 "type": "geopath",
