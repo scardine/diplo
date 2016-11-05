@@ -57,3 +57,5 @@ Unidecode==0.4.19
 wcwidth==0.1.7
 Werkzeug==0.11.11
 widgetsnbextension==1.2.6
+git+https://github.com/fladi/django-treebeard.git@django-1.10
+django-markdown-app==0.9.0
