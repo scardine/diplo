@@ -64,6 +64,7 @@ class Indicador(NamedModel):
 
     class Meta:
         verbose_name_plural = u"Indicadores"
+        ordering = (u"nome",)
 
     def dados(self, regionalizacao='munic'):
         df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
@@ -137,11 +138,16 @@ class Categoria(MP_Node):
     subtitulo = models.TextField(null=True, blank=True)
     slug = models.SlugField(unique=True)
     ordem = models.PositiveIntegerField(default=1)
-    home = models.BooleanField(u'Exibir card na homepage?', default=True)
+    home = models.BooleanField(u'Exibir card na homepage', default=True)
+    menu = models.BooleanField(u'Exibir entrada no menu', default=True)
 
     node_order_by = ('ordem', 'nome')
 
     def __str__(self):
+        parent = self.get_parent()
+        if parent:
+            return u"{} > {}".format(parent, self.nome)
         return self.nome
+
 
 

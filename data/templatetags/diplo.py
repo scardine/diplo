@@ -119,3 +119,8 @@ def static_page_link(context, url, label):
     context['label'] = label
     context['active'] = active
     return mark_safe(render_to_string('static-page-link.html', context=context))
+
+@register.filter
+def is_parent(categoria, indicador):
+    return categoria in indicador.categoria.get_ancestors()
+

@@ -1,0 +1,22 @@
+{% load diplo %}
+{% if entry.is_leaf and entry.indicador_set.count %}
+    <li>
+        <a href="#categoria-{{ entry.pk }}" class="{% if object.categoria_id != entry.pk %}collapsed{% endif %}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="categorias-{{ entry.pk }}"><i class="fa fa-foo"></i> {{ entry.nome }}</a>
+        <div id="categoria-{{ entry.pk }}" class="{% if object.categoria_id == entry.pk %}in {% endif %}collapse">
+            <ul class="nav level-{{ entry.depth|add:1 }}">
+                {% for indicador in entry.indicador_set.all %}
+                    <li{% if object.pk == indicador.pk %} class="active"{% endif %}><a href="{% url 'indicador-detail' tema=indicador.tema_id pk=indicador.pk %}">{{ indicador.nome }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </li>
+{% elif entry.get_children_count %}
+    <li>
+        <a href="#categoria-{{ entry.pk }}" class="{% if not entry|is_parent:object %}collapsed{% endif %}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="categorias-{{ entry.pk }}"><i class="fa fa-foo"></i> {{ entry.nome }}</a>
+        <div id="categoria-{{ entry.pk }}" class="{% if entry|is_parent:object %}in {% endif %}collapse">
+            <ul class="nav level-{{ entry.depth|add:1 }}">
+                {% for subentry in entry.get_children %}{% include 'categoria-menu-entry.html' with entry=subentry %}{% endfor %}
+            </ul>
+        </div>
+    </li>
+{% endif %}

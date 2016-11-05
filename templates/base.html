@@ -65,17 +65,8 @@
                         Indicadores</a>
                     <div id="lista-de-temas" class="{% if object %}in {% endif %}collapse">
                         <ul class="nav level-1">
-                            {% for tema in menu_temas %}
-                            <li>
-                                <a href="#indicadores-{{ tema.pk }}" class="{% if object.tema_id != tema.pk %}collapsed{% endif %}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="indicadores-{{ tema.pk }}"><i class="fa fa-foo"></i> {{ tema.nome }}</a>
-                                <div id="indicadores-{{ tema.pk }}" class="{% if object.tema_id == tema.pk %}in {% endif %}collapse">
-                                    <ul class="nav level-2">
-                                        {% for indicador in tema.indicador_set.all %}
-                                            <li{% if object.pk == indicador.pk %} class="active"{% endif %}><a href="{% url 'indicador-detail' tema=indicador.tema_id pk=indicador.pk %}">{{ indicador.nome }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </li>
+                            {% for entry in lista_categorias %}
+                                {% include 'categoria-menu-entry.html' with entry=entry %}
                             {% endfor %}
                         </ul>
                     </div>
