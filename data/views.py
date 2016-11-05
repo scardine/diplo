@@ -80,6 +80,18 @@ class IndicadorMap(DetailView):
         return d
 
 
+class IndicadorChart(DetailView):
+    template_name = 'indicador-detail-chart.html'
+    queryset = Indicador.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorChart, self).get_context_data(**kwargs)
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        d['ordem'] = self.request.GET.get('o', 'localidade')
+        return d
+
+
 class CategoriaDetail(DetailView):
     template_name = 'categoria-detail.html'
     queryset = Categoria.objects.all()

@@ -24,7 +24,14 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ['Open Sans', 'Lato', 'Oswald']
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -39,18 +46,39 @@
                 </li>
                 <li>
                     <a href="{% url 'home' %}">
+                        <i class="fa fa-home"></i>
+                        Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'home' %}">
                         <i class="fa fa-dashboard"></i>
-                        Dashboards</a>
+                        Paineis Temáticos</a>
                 </li>
                 <li>
-                    <a href="{% url 'indicador-map-list' tema='' %}">
-                        <i class="fa fa-map"></i>
-                        Mapas</a>
+                    <a href="{% url 'home' %}">
+                        <i class="fa fa-exchange"></i>
+                        Fluxos</a>
                 </li>
                 <li>
-                    <a href="{% url 'indicador-list' tema='' %}">
-                        <i class="fa fa-table"></i>
-                        Dados</a>
+                    <a href="#lista-de-temas" {% if not object %}class="collapsed"{% endif %} data-toggle="collapse" role="button" expanded="false" aria-controls="lista-de-temas">
+                        <i class="fa fa-foo"></i>
+                        Indicadores</a>
+                    <div id="lista-de-temas" class="{% if object %}in {% endif %}collapse">
+                        <ul class="nav level-1">
+                            {% for tema in menu_temas %}
+                            <li>
+                                <a href="#indicadores-{{ tema.pk }}" class="{% if object.tema_id != tema.pk %}collapsed{% endif %}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="indicadores-{{ tema.pk }}"><i class="fa fa-foo"></i> {{ tema.nome }}</a>
+                                <div id="indicadores-{{ tema.pk }}" class="{% if object.tema_id == tema.pk %}in {% endif %}collapse">
+                                    <ul class="nav level-2">
+                                        {% for indicador in tema.indicador_set.all %}
+                                            <li{% if object.pk == indicador.pk %} class="active"{% endif %}><a href="{% url 'indicador-detail' tema=indicador.tema_id pk=indicador.pk %}">{{ indicador.nome }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </li>
                 {% if request.user.is_authenticated %}
                 <li>
@@ -111,14 +139,6 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-    <script>
-      WebFont.load({
-        google: {
-          families: ['Open Sans', 'Lato', 'Oswald']
-        }
-      });
     </script>
 {% block js %}{% endblock %}
 

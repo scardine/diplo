@@ -87,6 +87,7 @@ class Dado(NamedModel):
 @python_2_unicode_compatible
 class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
+    categoria = models.ForeignKey('Categoria')
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
     publicado = models.BooleanField(default=False)
