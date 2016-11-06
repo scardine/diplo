@@ -28,6 +28,11 @@
             padding: 120px 30px 30px;
             transition: background-color 0.8s;
         }
+        .card.card-0 {
+            background-color: rgba(11,94,86, 0.5);
+            padding: 30px;
+        }
+        .card-0:hover { background-color: #0b5e56;}
         .card-1:hover { background-color: #00d2ff;}
         .card-2:hover { background-color: #b2e5e5;}
         .card-3:hover { background-color: #86becb;}
@@ -59,6 +64,10 @@
             </div>
         {% endwith %}
         <div class="row cards">
+            <a href="{% url 'categoria-detail' slug=fluxos.slug %}" class="card col-xs-12 card-0">
+                <h3>{{ fluxos.nome }}</h3>
+                <p>{{ fluxos.subtitulo }}</p>
+            </a>
             {% for categoria in categorias|slice:'0:6' %}
                 <a href="{% url 'categoria-detail' slug=categoria.slug %}" class="card col-lg-4 col-md-6 card-{% cycle 1 2 3 4 5 6 %}">
                     <h3>{{ categoria.nome }}</h3>

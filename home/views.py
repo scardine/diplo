@@ -10,9 +10,10 @@ class Index(TemplateView):
 
     def get_context_data(self, **kwargs):
         d = super(Index, self).get_context_data(**kwargs)
-        d['categorias'] = Categoria.objects.filter(depth=1, home=True).order_by('ordem')
+        d['categorias'] = Categoria.objects.filter(depth=1, home=True).exclude(slug='fluxos-dos-servicos-de-saude').order_by('ordem')
         d['conteudo_home'] = FlatPage.objects.get(url='/conteudo/home/').content
         d['conteudos'] = Conteudo.objects.all()
+        d['fluxos'] = Categoria.objects.get(slug='fluxos-dos-servicos-de-saude')
         return d
 
 

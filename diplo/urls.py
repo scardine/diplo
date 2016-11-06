@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^tema/mapa/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list', kwargs={'tema': ''}),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),
     url(r'^tema/mapa/(?P<tema>\d+)/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list'),
-    url(r'^indicadores/(?P<slug>[-\w\d]+)/$', data_views.CategoriaDetail.as_view(), name='categoria-detail'),
+    url(r'^painel-tematico/(?P<slug>[-\w\d]+)/$', data_views.CategoriaDetail.as_view(), name='categoria-detail'),
     url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
     url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
     url(r'^tema/grafico/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorChart.as_view(), name='indicador-chart-detail'),

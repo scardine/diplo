@@ -85,6 +85,17 @@ class Dado(NamedModel):
         unique_together = (('indicador', 'localidade', 'ano'),)
 
 
+class DadoFluxo(NamedModel):
+    indicador = models.ForeignKey(Indicador)
+    origem = models.ForeignKey(Localidade, related_name='dados_origem')
+    destino = models.ForeignKey(Localidade, related_name='dados_destino')
+    ano = models.IntegerField()
+    valor = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = (('indicador', 'origem', 'destino', 'ano'),)
+
+
 @python_2_unicode_compatible
 class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
@@ -136,7 +147,7 @@ class Painel(models.Model):
 class Categoria(MP_Node):
     nome = models.CharField(max_length=300)
     subtitulo = models.TextField(null=True, blank=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=255)
     ordem = models.PositiveIntegerField(default=1)
     home = models.BooleanField(u'Exibir card na homepage', default=True)
     menu = models.BooleanField(u'Exibir entrada no menu', default=True)

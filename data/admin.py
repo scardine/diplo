@@ -39,6 +39,8 @@ class LocalidadeAdmin(admin.ModelAdmin):
 
 class CategoriaAdmin(TreeAdmin):
     form = movenodeform_factory(Categoria)
+    list_display = ('nome', 'home', 'menu',)
+    list_editable = ('home', 'menu',)
 
 
 admin.site.register(Tema, TemaAdmin)

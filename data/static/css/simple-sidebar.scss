@@ -146,6 +146,19 @@ a.collapsed > i.fa-foo:before { content: "\f054"; }
   }
 }
 
+.nav.level-4 > li {
+  text-indent: 0;
+  line-height: 16px;
+  font-size: 12px;
+  &.active {
+    background-color: #337ab7;
+    & > a { color: #fff; }
+  }
+  & > a {
+    padding: 4px 15px 4px 80px;
+  }
+}
+
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
   text-decoration: none;

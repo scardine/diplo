@@ -116,6 +116,17 @@ a.collapsed > i.fa-foo:before {
   .nav.level-3 > li > a {
     padding: 4px 15px 4px 70px; }
 
+.nav.level-4 > li {
+  text-indent: 0;
+  line-height: 16px;
+  font-size: 12px; }
+  .nav.level-4 > li.active {
+    background-color: #337ab7; }
+    .nav.level-4 > li.active > a {
+      color: #fff; }
+  .nav.level-4 > li > a {
+    padding: 4px 15px 4px 80px; }
+
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
   text-decoration: none; }
