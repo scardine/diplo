@@ -3,6 +3,11 @@
 {% load bootstrap3 %}
 {% load static %}
 
+{% block css%}
+	{{ block.super }}
+	<link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
+{% endblock%}
+
 {% block dados %}{% endblock %}
 {% block tipo %}grafico{% endblock %}
 {% block grafico %} class="active"{% endblock %}
@@ -10,9 +15,11 @@
 {% block content %}
     {{ block.super }}
     <div id="data-table-container">
-        <div id="vis"></div>
+        <div id="vis">{{ chart.div|safe }}</div>
     </div>
 {% endblock %}
 
 {% block js %}
+<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+{{ chart.script|safe }}
 {% endblock %}

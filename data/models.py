@@ -71,6 +71,11 @@ class Indicador(NamedModel):
         df['_'] = df.index.map(unidecode)
         return df.sort_values(by='_').drop(labels=['_'], axis=1)
 
+    def dataframe(self, regionalizacao='munic'):
+        df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao))
+        df.valor = df.valor.astype(float)
+        return df
+
     def dados_html(self):
         return self.dados().to_html(classes=['table', 'table-striped'])
 

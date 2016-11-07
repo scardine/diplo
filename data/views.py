@@ -7,7 +7,9 @@ from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
 from data.models import Tema, Indicador, Dashboard, Localidade, Categoria
-
+from bokeh.charts import Bar
+from bokeh.embed import components
+from bokeh.resources import CDN
 
 class Home(TemplateView):
     template_name = 'dashboard.html'
@@ -89,6 +91,15 @@ class IndicadorChart(DetailView):
         d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
+
+        dataframe = d['object'].dataframe()
+        plot = Bar(dataframe, label='ano', values='valor', agg='sum', group='ano',
+        title="Titulo")
+        script, div = components(plot, CDN)
+        d['chart'] = {
+            'div': div,
+            'script': script
+        }
         return d
 
 
