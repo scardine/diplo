@@ -124,3 +124,7 @@ def static_page_link(context, url, label):
 def is_parent(categoria, indicador):
     return categoria in indicador.categoria.get_ancestors()
 
+@register.filter
+def ul_split(s, splitchar=','):
+    itens = s.split(splitchar)
+    return mark_safe(render_to_string('item-list.html', context={"itens": itens}))

@@ -26,7 +26,7 @@
     <ul class="nav nav-tabs">
         <li role="presentation"{% block dados %} class="active"{% endblock %}><a href="{% url 'indicador-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-table"></i> Dados</a></li>
         <li role="presentation"{% block mapa %}{% endblock %}><a href="{% url 'indicador-map-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-map"></i> Mapas</a></li>
-        <li role="presentation"{% block grafico %}{% endblock %}><a href="{% url 'indicador-chart-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-bar-chart"></i> Gráficos</a></li>
+        <li role="presentation"{% block grafico %}{% endblock %}><a href="{% url 'indicador-chart-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-info-circle"></i> Informações</a></li>
     </ul>
     <h1 class="text-center"><small>{{ object.tema }}:</small>
         <br> {{ object.nome }}</h1>
