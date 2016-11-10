@@ -113,8 +113,9 @@ class IndicadorChart(DetailView):
         d['ordem'] = self.request.GET.get('o', 'localidade')
 
         dataframe = d['object'].dataframe()
-        plot = Bar(dataframe, label='ano', values='valor', agg='sum', group='ano',
-        title="Titulo")
+        plot = Bar(dataframe, label='ano', values='valor', agg='sum', group='ano', title="Titulo")
+        plot.logo = None
+
         script, div = components(plot, CDN)
         d['chart'] = {
             'div': div,
