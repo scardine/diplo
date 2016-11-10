@@ -1,6 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
+from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
@@ -85,6 +87,19 @@ class IndicadorMap(DetailView):
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
+
+
+def download_csv(request, pk, regionalizacao):
+    indicador = get_object_or_404(Indicador, pk=pk)
+    df = indicador.dataframe(regionalizacao).pivot(index='localidade', columns='ano', values='valor')
+    r = HttpResponse(content_type='text/csv')
+    r['Content-Disposition'] = 'attachment; filename="{}--{}--{}.csv"'.format(
+        indicador.categoria.slug if indicador.categoria else slugify(indicador.tema.nome),
+        slugify(indicador.nome),
+        regionalizacao,
+    )
+    df.to_csv(r, sep=';', decimal=',', encoding='iso-8859-1')
+    return r
 
 
 class IndicadorChart(DetailView):

@@ -31,6 +31,9 @@
     </ul>
     <h1 class="text-center"><small>{{ object.tema }}:</small>
         <br> {{ object.nome }}</h1>
+    <p class="text-center">
+        <a href="{% url 'download-csv' pk=object.pk regionalizacao=regionalizacao %}" class="btn"><i class="fa fa-download"></i> download</a>
+    </p>
 {% endblock %}
 
 {% block extra %}
