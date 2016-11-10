@@ -2,11 +2,7 @@
 {% load diplo %}
 {% load bootstrap3 %}
 {% load static %}
-
-{% block css%}
-	{{ block.super }}
-	<link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
-{% endblock%}
+{% load sekizai_tags %}
 
 {% block dados %}{% endblock %}
 {% block tipo %}grafico{% endblock %}
@@ -46,7 +42,12 @@
     </div>
 {% endblock %}
 
-{% block js %}
-<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
-{{ chart.script|safe }}
+{% block extra %}
+    {% addtoblock 'css' %}
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
+    {% endaddtoblock%}
+    {% addtoblock 'js' %}
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+    {{ chart.script|safe }}
+    {% endaddtoblock %}
 {% endblock %}

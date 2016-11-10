@@ -118,9 +118,9 @@ class Dashboard(models.Model):
 
 
 class Modelo(NamedModel):
-    html = models.TextField()
-    css = models.TextField()
-    js = models.TextField()
+    html = models.TextField(default='<!-- -->')
+    css = models.TextField(default='<style></style>')
+    js = models.TextField(default='<script></script>')
     last_update = models.DateTimeField(auto_now=True)
 
     def render(self, context):

@@ -30,6 +30,11 @@ class TemaList(ListView):
     queryset = Tema.objects.all()
 
 
+class DashboardList(ListView):
+    template_name = 'dashboard-list.html'
+    queryset = Dashboard.objects.all()
+
+
 class IndicadorList(ListView):
     template_name = 'indicador-list.html'
 

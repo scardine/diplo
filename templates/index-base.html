@@ -2,6 +2,7 @@
 {% load static %}
 {% load diplo %}
 {% load django_markdown %}
+{% load sekizai_tags %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +30,7 @@
             padding-bottom: 30px;
         }
         .navbar {min-height: 80px !important;}
-        {% block style %}
+        {% addtoblock 'style' %}
         #bigphoto {
             background-image: url({% static 'img/medico.jpg' %});
             -webkit-background-size: cover;
@@ -73,7 +74,8 @@
             color: white;
             padding: 10px 0;
         }
-        {% endblock %}
+        {% endaddtoblock %}
+        {% render_block 'style' %}
     </style>
 </head>
 <body>
@@ -121,7 +123,7 @@
     </div>
 {% endblock %}
 
-{% block js %}
+{% addtoblock 'js' %}
     <script src="http://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -133,7 +135,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-{% endblock %}
-
+{% endaddtoblock %}
+{% render_block 'js' %}
 </body>
 </html>

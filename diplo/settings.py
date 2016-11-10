@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'home',
     'glossario',
     'django_markdown',
+    'sekizai',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'home.context_processors.menu_context_processor',
+                'sekizai.context_processors.sekizai',
             ],
         },
     },

@@ -2,6 +2,7 @@
 {% load diplo %}
 {% load bootstrap3 %}
 {% load static %}
+{% load sekizai_tags %}
 
 {% block dados %}{% endblock %}
 {% block tipo %}mapa{% endblock %}
@@ -14,96 +15,98 @@
     </div>
 {% endblock %}
 
-{% block js %}
-    <script src="https://vega.github.io/vega-editor/vendor/d3.min.js"></script>
-    <script src="https://vega.github.io/vega-editor/vendor/d3.geo.projection.min.js"></script>
-    <script src="https://vega.github.io/vega-editor/vendor/topojson.js"></script>
-    <script src="https://vega.github.io/vega-editor/vendor/d3.layout.cloud.js"></script>
-    <script src="https://vega.github.io/vega/vega.js"></script>
-    <script src="https://cdn.jsdelivr.net/lodash/4.16.4/lodash.min.js"></script>
-    <script>
-        $(function () {
-            function get_year(data, year) {
-                var to_table = function(v, k) { return {localidade: k, valor: parseFloat(v)}; };
-                if (year === undefined) {
-                    for (var k in data) {
-                        if (data.hasOwnProperty(k)) {
-                            return _.map(data[k], to_table);
-                        }
-                    }
-                }
-                return _.map(data[year], to_table)
-            }
-
-            var dados = {{ object|get_data:regionalizacao|order_df:ordem|to_json|safe }};
-            var spec = {
-                "width": 960,
-                "height": 500,
-                "data": [
-                    {
-                        "name": "table",
-                        "values": get_year(dados)
-                    },
-                    {
-                        "name": "mun",
-                        "url": "/static/geo/{{ regionalizacao }}.topojson.json",
-                        "format": {"type": "topojson", "feature": "{{ regionalizacao }}"},
-                        "transform": [
-                            {
-                                "type": "geopath",
-                                "projection": "mercator",
-                                "value": "data",
-                                "scale": 5000.0,
-                                "translate": [0, -5000]
-                            },
-                            {
-                                "type": "lookup", "on": "table", "onKey": "nomemun",
-                                "keys": ["localidade"], "as": ["value"],
-                                "default": 0
-                            },
-                            {
-                                "type": "filter",
-                                "test": "datum.value!==null"
+{% block extra %}
+    {% addtoblock 'js' %}
+        <script src="https://vega.github.io/vega-editor/vendor/d3.min.js"></script>
+        <script src="https://vega.github.io/vega-editor/vendor/d3.geo.projection.min.js"></script>
+        <script src="https://vega.github.io/vega-editor/vendor/topojson.js"></script>
+        <script src="https://vega.github.io/vega-editor/vendor/d3.layout.cloud.js"></script>
+        <script src="https://vega.github.io/vega/vega.js"></script>
+        <script src="https://cdn.jsdelivr.net/lodash/4.16.4/lodash.min.js"></script>
+        <script>
+            $(function () {
+                function get_year(data, year) {
+                    var to_table = function(v, k) { return {localidade: k, valor: parseFloat(v)}; };
+                    if (year === undefined) {
+                        for (var k in data) {
+                            if (data.hasOwnProperty(k)) {
+                                return _.map(data[k], to_table);
                             }
-                        ]
-                    }
-                ],
-                "scales": [
-                    {
-                        "name": "color",
-                        "type": "quantize",
-                        "range": ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6",
-                            "#4292c6", "#2171b5", "#08519c", "#08306b"]
-                    }
-                ],
-                "marks": [
-                    {
-                      "type": "path",
-                      "from": {"data": "mun"},
-                      "properties": {
-                        "enter": {
-                          "stroke": {"value": "black"},
-                          "path": {"field": "layout_path"}
-                        },
-                        "update": {"fill": {"value": "white"}},
-                        "hover": {"fill": {"value": "pink"}}
-                      }
-                    }/*
-                    {
-                        "type": "path",
-                        "from": {"data": "mun"},
-                        "properties": {
-                            "enter": {"path": {"field": "layout_path"}},
-                            "update": {"fill": {"scale": "color", "field": "dados.valor"}},
-                            "hover": {"fill": {"value": "red"}}
                         }
-                    }*/
-                ]
-            };
-            vg.parse.spec(spec, function(error, chart) {
-                chart({el:"#vis"}).update();
-            });
-        });
+                    }
+                    return _.map(data[year], to_table)
+                }
 
-    </script>
+                var dados = {{ object|get_data:regionalizacao|order_df:ordem|to_json|safe }};
+                var spec = {
+                    "width": 960,
+                    "height": 500,
+                    "data": [
+                        {
+                            "name": "table",
+                            "values": get_year(dados)
+                        },
+                        {
+                            "name": "mun",
+                            "url": "/static/geo/{{ regionalizacao }}.topojson.json",
+                            "format": {"type": "topojson", "feature": "{{ regionalizacao }}"},
+                            "transform": [
+                                {
+                                    "type": "geopath",
+                                    "projection": "mercator",
+                                    "value": "data",
+                                    "scale": 5000.0,
+                                    "translate": [0, -5000]
+                                },
+                                {
+                                    "type": "lookup", "on": "table", "onKey": "nomemun",
+                                    "keys": ["localidade"], "as": ["value"],
+                                    "default": 0
+                                },
+                                {
+                                    "type": "filter",
+                                    "test": "datum.value!==null"
+                                }
+                            ]
+                        }
+                    ],
+                    "scales": [
+                        {
+                            "name": "color",
+                            "type": "quantize",
+                            "range": ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6",
+                                "#4292c6", "#2171b5", "#08519c", "#08306b"]
+                        }
+                    ],
+                    "marks": [
+                        {
+                            "type": "path",
+                            "from": {"data": "mun"},
+                            "properties": {
+                                "enter": {
+                                    "stroke": {"value": "black"},
+                                    "path": {"field": "layout_path"}
+                                },
+                                "update": {"fill": {"value": "white"}},
+                                "hover": {"fill": {"value": "pink"}}
+                            }
+                        }/*
+                         {
+                         "type": "path",
+                         "from": {"data": "mun"},
+                         "properties": {
+                         "enter": {"path": {"field": "layout_path"}},
+                         "update": {"fill": {"scale": "color", "field": "dados.valor"}},
+                         "hover": {"fill": {"value": "red"}}
+                         }
+                         }*/
+                    ]
+                };
+                vg.parse.spec(spec, function(error, chart) {
+                    chart({el:"#vis"}).update();
+                });
+            });
+
+        </script>
+    {% endaddtoblock %}
 {% endblock %}

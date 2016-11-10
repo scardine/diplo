@@ -59,3 +59,5 @@ Werkzeug==0.11.11
 widgetsnbextension==1.2.6
 git+https://github.com/fladi/django-treebeard.git@django-1.10
 django-markdown-app==0.9.0
+django-classy-tags==0.8.0
+django-sekizai==0.10.0
