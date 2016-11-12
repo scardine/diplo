@@ -1,17 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
+from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
-from data.models import Tema, Indicador, Dashboard, Localidade
-
-
-class Index(TemplateView):
-    template_name = 'index.html'
-
+from data.models import Tema, Indicador, Dashboard, Localidade, Categoria
+from bokeh.charts import Bar
+from bokeh.embed import components
+from bokeh.resources import CDN
 
 class Home(TemplateView):
     template_name = 'dashboard.html'
@@ -30,6 +30,11 @@ class Home(TemplateView):
 class TemaList(ListView):
     template_name = 'tema-list.html'
     queryset = Tema.objects.all()
+
+
+class DashboardList(ListView):
+    template_name = 'dashboard-list.html'
+    queryset = Dashboard.objects.all()
 
 
 class IndicadorList(ListView):
@@ -83,3 +88,47 @@ class IndicadorMap(DetailView):
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
 
+
+def download_csv(request, pk, regionalizacao):
+    indicador = get_object_or_404(Indicador, pk=pk)
+    df = indicador.dataframe(regionalizacao).pivot(index='localidade', columns='ano', values='valor')
+    r = HttpResponse(content_type='text/csv')
+    r['Content-Disposition'] = 'attachment; filename="{}--{}--{}.csv"'.format(
+        indicador.categoria.slug if indicador.categoria else slugify(indicador.tema.nome),
+        slugify(indicador.nome),
+        regionalizacao,
+    )
+    df.to_csv(r, sep=';', decimal=',', encoding='iso-8859-1')
+    return r
+
+
+class IndicadorChart(DetailView):
+    template_name = 'indicador-detail-chart.html'
+    queryset = Indicador.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorChart, self).get_context_data(**kwargs)
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
+        d['ordem'] = self.request.GET.get('o', 'localidade')
+
+        dataframe = d['object'].dataframe()
+        plot = Bar(dataframe, label='ano', values='valor', agg='sum', group='ano', title="Titulo")
+        plot.logo = None
+
+        script, div = components(plot, CDN)
+        d['chart'] = {
+            'div': div,
+            'script': script
+        }
+        return d
+
+
+class CategoriaDetail(DetailView):
+    template_name = 'categoria-detail.html'
+    queryset = Categoria.objects.all()
+
+
+class CategoriaList(ListView):
+    template_name = 'categoria-list.html'
+    queryset = Categoria.objects.all()

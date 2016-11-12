@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from data import views as data_views
+from home import views as home_views
+from django_markdown import flatpages
+admin.autodiscover()
+flatpages.register()
 
 urlpatterns = [
-    url(r'^$', data_views.Index.as_view(), name='home'),
+    url(r'^$', home_views.Index.as_view(), name='home'),
     url(r'^glossario/', include('glossario.urls')),
     #url(r'^$', data_views.Home.as_view(), name='home', kwargs={'dashboard': '', 'localidades': 'munic'}),
     url(r'^dashboard/(?P<dashboard>\d+)/(?P<localidades>\w+)/$', data_views.Home.as_view(), name='dashboard'),
@@ -26,11 +30,17 @@ urlpatterns = [
     url(r'^tema/mapa/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list', kwargs={'tema': ''}),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),
     url(r'^tema/mapa/(?P<tema>\d+)/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list'),
-    url(r'^tema/(?P<tema>\d+)/$', data_views.IndicadorList.as_view(), name='indicador-list'),
+    url(r'^painel-tematico/(?P<slug>[-\w\d]+)/$', data_views.CategoriaDetail.as_view(), name='categoria-detail'),
     url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
     url(r'^tema/mapa/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorMap.as_view(), name='indicador-map-detail'),
-    url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
-    url(r'^tema/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
+    url(r'^tema/grafico/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorChart.as_view(), name='indicador-chart-detail'),
+    url(r'^tema/grafico/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorChart.as_view(), name='indicador-chart-detail'),
+    url(r'^tema/dados/(?P<tema>\d+)/(?P<pk>\d+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
+    url(r'^tema/dados/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
+    url(r'^tema/dados/(?P<tema>\d+)/$', data_views.IndicadorList.as_view(), name='indicador-list'),
+    url(r'^download/dados/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.download_csv, name='download-csv'),
+    url(r'^conteudo/', include('django.contrib.flatpages.urls')),
+    url(r'^markdown/', include( 'django_markdown.urls')),
     url(r'^admin/', admin.site.urls),
 ]
 

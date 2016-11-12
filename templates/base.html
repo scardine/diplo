@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static bootstrap3 %}
+{% load sekizai_tags %}
 <head>
 
     <meta charset="utf-8">
@@ -10,7 +11,8 @@
     <meta name="author" content="">
 
     <title>Gestão Regional e Redes</title>
-
+    {% render_block 'css' %}
+    {% addtoblock 'css' %}
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -24,7 +26,15 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-
+    {% endaddtoblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ['Open Sans', 'Lato', 'Oswald']
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -39,18 +49,30 @@
                 </li>
                 <li>
                     <a href="{% url 'home' %}">
+                        <i class="fa fa-home"></i>
+                        Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'home' %}">
                         <i class="fa fa-dashboard"></i>
-                        Dashboards</a>
+                        Paineis Temáticos</a>
                 </li>
                 <li>
-                    <a href="{% url 'indicador-map-list' tema='' %}">
-                        <i class="fa fa-map"></i>
-                        Mapas</a>
+                    <a href="{% url 'home' %}">
+                        <i class="fa fa-exchange"></i>
+                        Fluxos</a>
                 </li>
                 <li>
-                    <a href="{% url 'indicador-list' tema='' %}">
-                        <i class="fa fa-table"></i>
-                        Dados</a>
+                    <a href="#lista-de-temas" {% if not object %}class="collapsed"{% endif %} data-toggle="collapse" role="button" expanded="false" aria-controls="lista-de-temas">
+                        <i class="fa fa-foo"></i>
+                        Indicadores</a>
+                    <div id="lista-de-temas" class="{% if object %}in {% endif %}collapse">
+                        <ul class="nav level-1">
+                            {% for entry in lista_categorias %}
+                                {% include 'categoria-menu-entry.html' with entry=entry %}
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </li>
                 {% if request.user.is_authenticated %}
                 <li>
@@ -112,16 +134,8 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-    <script>
-      WebFont.load({
-        google: {
-          families: ['Open Sans', 'Lato', 'Oswald']
-        }
-      });
-    </script>
-{% block js %}{% endblock %}
-
+    {% render_block 'js' %}
+    {% block extra %}{% endblock %}
 </body>
 
 </html>

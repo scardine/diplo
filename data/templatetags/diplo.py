@@ -1,4 +1,5 @@
 from django import template
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django_pandas.io import read_frame
 from unidecode import unidecode
@@ -104,3 +105,26 @@ def to_html(df, format=''):
 @register.filter
 def to_json(df):
     return df.to_json()
+
+
+@register.simple_tag(takes_context=True)
+def static_page_link(context, url, label):
+    if url.endswith('$'):
+        url = url[:-1]
+        active = context['request'].path == url
+    else:
+        active = context['request'].path.startswith(url)
+    context = context.flatten()
+    context['url'] = url
+    context['label'] = label
+    context['active'] = active
+    return mark_safe(render_to_string('static-page-link.html', context=context))
+
+@register.filter
+def is_parent(categoria, indicador):
+    return categoria in indicador.categoria.get_ancestors()
+
+@register.filter
+def ul_split(s, splitchar=','):
+    itens = s.split(splitchar)
+    return mark_safe(render_to_string('item-list.html', context={"itens": itens}))

@@ -1,0 +1,8 @@
+{% extends 'index-base.html' %}
+{% load django_markdown %}
+{% block conteudo %}
+    <div class="container">
+        <h1>{{ flatpage.title }}</h1>
+        {{ flatpage.content|markdown }}
+    </div>
+{% endblock %}

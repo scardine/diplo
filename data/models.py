@@ -64,11 +64,17 @@ class Indicador(NamedModel):
 
     class Meta:
         verbose_name_plural = u"Indicadores"
+        ordering = (u"nome",)
 
     def dados(self, regionalizacao='munic'):
         df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
         df['_'] = df.index.map(unidecode)
         return df.sort_values(by='_').drop(labels=['_'], axis=1)
+
+    def dataframe(self, regionalizacao='munic'):
+        df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao))
+        df.valor = df.valor.astype(float)
+        return df
 
     def dados_html(self):
         return self.dados().to_html(classes=['table', 'table-striped'])
@@ -84,9 +90,21 @@ class Dado(NamedModel):
         unique_together = (('indicador', 'localidade', 'ano'),)
 
 
+class DadoFluxo(NamedModel):
+    indicador = models.ForeignKey(Indicador)
+    origem = models.ForeignKey(Localidade, related_name='dados_origem')
+    destino = models.ForeignKey(Localidade, related_name='dados_destino')
+    ano = models.IntegerField()
+    valor = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = (('indicador', 'origem', 'destino', 'ano'),)
+
+
 @python_2_unicode_compatible
 class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
+    categoria = models.ForeignKey('Categoria')
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
     publicado = models.BooleanField(default=False)
@@ -100,9 +118,9 @@ class Dashboard(models.Model):
 
 
 class Modelo(NamedModel):
-    html = models.TextField()
-    css = models.TextField()
-    js = models.TextField()
+    html = models.TextField(default='<!-- -->')
+    css = models.TextField(default='<style></style>')
+    js = models.TextField(default='<script></script>')
     last_update = models.DateTimeField(auto_now=True)
 
     def render(self, context):
@@ -134,12 +152,18 @@ class Painel(models.Model):
 class Categoria(MP_Node):
     nome = models.CharField(max_length=300)
     subtitulo = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True, max_length=255)
     ordem = models.PositiveIntegerField(default=1)
-    home = models.BooleanField(u'Exibir card na homepage?', default=True)
+    home = models.BooleanField(u'Exibir card na homepage', default=True)
+    menu = models.BooleanField(u'Exibir entrada no menu', default=True)
 
     node_order_by = ('ordem', 'nome')
 
     def __str__(self):
+        parent = self.get_parent()
+        if parent:
+            return u"{} > {}".format(parent, self.nome)
         return self.nome
+
 
 

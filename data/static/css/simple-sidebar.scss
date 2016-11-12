@@ -9,7 +9,7 @@ $dark-background: #37a2d6;
 $menu-foreground-hover: #ffffff;
 $menu-background: #ffffff;
 $menu-background-hover: $dark-background;
-$width: 250px;
+$width: 350px;
 $borda-menu: 1px dotted $menu-foreground;
 
 #wrapper {
@@ -29,7 +29,7 @@ $borda-menu: 1px dotted $menu-foreground;
   border-bottom: none;
 }
 
-.sidebar-nav a {
+.sidebar-nav > li a, .sidebar-nav > li div {
   border-bottom: $borda-menu;
 }
 
@@ -111,15 +111,63 @@ body {
   background: $menu-background-hover;
 }
 
+a > i.fa-foo:before { content: "\f078"; }
+a.collapsed > i.fa-foo:before { content: "\f054"; }
+
+.nav.level-1 > li {
+  text-indent: 0;
+  line-height: 35px;
+  & > a { padding: 0 0 0 50px; }
+}
+
+.nav.level-2 > li {
+  text-indent: 0;
+  line-height: 16px;
+  font-size: 12px;
+  &.active {
+    background-color: #337ab7;
+    & > a { color: #fff; }
+  }
+  & > a {
+    padding: 4px 15px 4px 60px;
+  }
+}
+
+.nav.level-3 > li {
+  text-indent: 0;
+  line-height: 16px;
+  font-size: 12px;
+  &.active {
+    background-color: #337ab7;
+    & > a { color: #fff; }
+  }
+  & > a {
+    padding: 4px 15px 4px 70px;
+  }
+}
+
+.nav.level-4 > li {
+  text-indent: 0;
+  line-height: 16px;
+  font-size: 12px;
+  &.active {
+    background-color: #337ab7;
+    & > a { color: #fff; }
+  }
+  & > a {
+    padding: 4px 15px 4px 80px;
+  }
+}
+
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
   text-decoration: none;
 }
 
 .sidebar-nav > .sidebar-brand {
-  height: 65px;
+  height: 85px;
   font-size: 18px;
-  line-height: 60px;
+  line-height: 80px;
 }
 
 .sidebar-nav > .sidebar-brand a {
