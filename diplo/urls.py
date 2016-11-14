@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^$', home_views.Index.as_view(), name='home'),
     url(r'^glossario/', include('glossario.urls')),
     #url(r'^$', data_views.Home.as_view(), name='home', kwargs={'dashboard': '', 'localidades': 'munic'}),
-    url(r'^dashboard/(?P<dashboard>\d+)/(?P<localidades>\w+)/$', data_views.Home.as_view(), name='dashboard'),
+    url(r'^dashboard/(?P<pk>\d+)/$', data_views.DashboardDetail.as_view(), name='dashboard-detail'),
     # url(r'^tema/$', data_views.TemaList.as_view(), name='tema-list'),
     url(r'^tema/mapa/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list', kwargs={'tema': ''}),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),

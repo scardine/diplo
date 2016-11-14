@@ -1,36 +1,39 @@
 {% extends 'index-base.html' %}
 {% load static %}
 {% load django_markdown %}
-{% block style %}
+{% load sekizai_tags %}
+
+{% block conteudo %}
+    {% addtoblock 'style' %}
         #bigphoto {
-            background-image: url({% static 'img/medico.jpg' %});
-            -webkit-background-size: cover;
-            background-size: cover;
-            width: 100%;
-            margin: 0;
-            padding: 60px 0 0;
-            top: 0;
-            left: 0;
-            color: white;
+        background-image: url({% static 'img/medico.jpg' %});
+        -webkit-background-size: cover;
+        background-size: cover;
+        width: 100%;
+        margin: 0;
+        padding: 60px 0 0;
+        top: 0;
+        left: 0;
+        color: white;
         }
         #bigphoto h1, #bigphoto p {
-            font-family: Raleway, sans-serif;
-            font-weight: 200;
+        font-family: Raleway, sans-serif;
+        font-weight: 200;
         }
         #bigphoto h1 {
-            font-size: 50px;
+        font-size: 50px;
         }
         div.cards { margin-top: 60px;}
         a.card {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 120px 30px 30px;
-            transition: background-color 0.8s;
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 120px 30px 30px;
+        transition: background-color 0.8s;
         }
         .card.card-0 {
-            background-color: rgba(11,94,86, 0.5);
-            padding: 30px;
+        background-color: rgba(11, 94, 86, 0.5);
+        padding: 30px;
         }
         .card-0:hover { background-color: #0b5e56;}
         .card-1:hover { background-color: #00d2ff;}
@@ -45,13 +48,8 @@
         .card-4 { background-color: rgba(26,163,163, 0.5);}
         .card-5 { background-color: rgba(11,94,86, 0.5);}
         .card-6 { background-color: rgba(178,229,229, 0.5);}
-        div.footer {
-            background-color: #0b5e56;
-            color: white;
-            padding: 10px 0;
-        }
-{% endblock %}
-{% block conteudo %}
+    {% endaddtoblock %}
+
 <div id="bigphoto">
     <div class="container">
         {% with conteudo=conteudos|first  %}
@@ -74,20 +72,6 @@
                     <p>{{ categoria.subtitulo }}</p>
                 </a>
             {% endfor %}
-        </div>
-        <div class="row">
-            <a href="" class="card col-lg-4 col-md-6 card-3">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-4">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
-            <a href="" class="card col-lg-4 col-md-6 card-5">
-                <h3>Título</h3>
-                <p>Subtítulo da categoria</p>
-            </a>
         </div>
     </div>
 </div>

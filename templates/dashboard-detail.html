@@ -1,0 +1,12 @@
+{% extends 'index-base.html' %}
+{% load sekizai_tags %}
+{% load diplo %}
+
+{% block conteudo %}
+    <div class="container">
+        <h1 class="text-center">{{ object.titulo }}</h1>
+        {% for painel in object.painel_set.all %}
+            {% render_panel painel %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -132,3 +132,9 @@ class CategoriaDetail(DetailView):
 class CategoriaList(ListView):
     template_name = 'categoria-list.html'
     queryset = Categoria.objects.all()
+
+
+class DashboardDetail(DetailView):
+    template_name = 'dashboard-detail.html'
+    queryset = Dashboard.objects.all()
+

@@ -1,9 +1,15 @@
+from classytags.arguments import Argument
+from classytags.core import Options
+from classytags.helpers import InclusionTag
 from django import template
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django_pandas.io import read_frame
 from unidecode import unidecode
 import locale
+
+from data.charts import piramide_populacional
+
 locale.setlocale(locale.LC_NUMERIC, '')
 
 register = template.Library()
@@ -63,9 +69,21 @@ def chunks(iterable, chunk_size):
             yield chunk
 
 
-@register.simple_tag(takes_context=True)
-def render_panel(context, painel):
-    return mark_safe(painel.modelo.render(context))
+class RenderPanel(InclusionTag):
+    name = 'render_panel'
+    options = Options(
+        Argument('panel'),
+    )
+
+    def get_template(self, context, **kwargs):
+        return "modelo:{}".format(kwargs['panel'].modelo_id)
+
+    def get_context(self, context, **kwargs):
+        context.update(kwargs)
+        return context
+
+
+register.tag(RenderPanel)
 
 
 @register.filter
@@ -128,3 +146,8 @@ def is_parent(categoria, indicador):
 def ul_split(s, splitchar=','):
     itens = s.split(splitchar)
     return mark_safe(render_to_string('item-list.html', context={"itens": itens}))
+
+
+@register.filter
+def plota_piramide(painel):
+    return piramide_populacional(painel)

@@ -10,73 +10,39 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Saúde em Dados</title>
+    {% render_block 'css' %}
+    {% addtoblock 'css' %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:200,400" rel="stylesheet">
-
+    {% endaddtoblock %}
     <style>
-        body {
-            padding-top: 80px;
-            font-family: "Open Sans", Helvetica, sans-serif;
-        }
-        .navbar.navbar-default.navbar-fixed-top {
-            height: 80px;
-            background-color: white;
-        }
-        .navbar-nav > li > a {
-            height: 80px;
-            padding-top: 30px;
-            padding-bottom: 30px;
-        }
-        .navbar {min-height: 80px !important;}
-        {% addtoblock 'style' %}
-        #bigphoto {
-            background-image: url({% static 'img/medico.jpg' %});
-            -webkit-background-size: cover;
-            background-size: cover;
-            width: 100%;
-            margin: 0;
-            padding: 60px 0 0;
-            top: 0;
-            left: 0;
-            color: white;
-        }
-        #bigphoto h1, #bigphoto p {
-            font-family: Raleway, sans-serif;
-            font-weight: 200;
-        }
-        #bigphoto h1 {
-            font-size: 50px;
-        }
-        div.cards { margin-top: 60px;}
-        a.card {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 120px 30px 30px;
-            transition: background-color 0.8s;
-        }
-        .card-1:hover { background-color: #00d2ff;}
-        .card-2:hover { background-color: #b2e5e5;}
-        .card-3:hover { background-color: #86becb;}
-        .card-4:hover { background-color: #1aa3a3;}
-        .card-5:hover { background-color: #0b5e56;}
-        .card-6:hover { background-color: #b2e5e5;}
-        .card-1 { background-color: rgba(0, 210, 255, 0.5);}
-        .card-2 { background-color: rgba(178,229,229, 0.5);}
-        .card-3 { background-color: rgba(134,190,203, 0.5);}
-        .card-4 { background-color: rgba(26,163,163, 0.5);}
-        .card-5 { background-color: rgba(11,94,86, 0.5);}
-        .card-6 { background-color: rgba(178,229,229, 0.5);}
-        div.footer {
-            background-color: #0b5e56;
-            color: white;
-            padding: 10px 0;
-        }
-        {% endaddtoblock %}
         {% render_block 'style' %}
     </style>
+
+    {% addtoblock 'style' %}
+        body {
+        padding-top: 80px;
+        font-family: "Open Sans", Helvetica, sans-serif;
+        }
+        .navbar.navbar-default.navbar-fixed-top {
+        height: 80px;
+        background-color: white;
+        }
+        .navbar-nav > li > a {
+        height: 80px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        }
+        .navbar {min-height: 80px !important;}
+        div.footer {
+        background-color: #0b5e56;
+        color: white;
+        padding: 10px 0;
+        }
+    {% endaddtoblock %}
+
 </head>
 <body>
 <!-- Static navbar -->

@@ -123,9 +123,11 @@ class Modelo(NamedModel):
     js = models.TextField(default='<script></script>')
     last_update = models.DateTimeField(auto_now=True)
 
+    def get_template(self):
+        return Template(self.html)
+
     def render(self, context):
-        t = Template(self.html)
-        context['object'] = self
+        t = self.get_template()
         return t.render(context)
 
 
