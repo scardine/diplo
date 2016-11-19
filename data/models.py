@@ -7,6 +7,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
+from django.utils.text import slugify
 from django_pandas.io import read_frame
 import pandas as pd
 
@@ -44,6 +45,7 @@ class Localidade(NamedModel):
     TIPO = (
         ('uf', u'Estado de São Paulo'),
         ('regsau', u'Regiões de Saúde'),
+        ('pesquisa', u'Regiões de Saúde da Pesquisa'),
         ('drs', u'Departamentos Regionais de Saúde'),
         ('rras', u'Redes Regionais de Atenção à Saúde'),
         ('munic', u'Municípios Paulistas'),
@@ -80,7 +82,7 @@ class Indicador(NamedModel):
         return self.dados().to_html(classes=['table', 'table-striped'])
 
 
-class Dado(NamedModel):
+class Dado( models.Model):
     indicador = models.ForeignKey(Indicador)
     localidade = models.ForeignKey(Localidade)
     ano = models.IntegerField()
@@ -104,6 +106,7 @@ class DadoFluxo(NamedModel):
 @python_2_unicode_compatible
 class Dashboard(models.Model):
     titulo = models.CharField(max_length=250)
+    slug = models.SlugField(unique=True)
     categoria = models.ForeignKey('Categoria')
     descricao = models.TextField(u"Descrição")
     ordem = models.PositiveIntegerField(default=0, blank=False, null=False)
@@ -160,6 +163,12 @@ class Categoria(MP_Node):
     menu = models.BooleanField(u'Exibir entrada no menu', default=True)
 
     node_order_by = ('ordem', 'nome')
+
+    def indicador(self):
+        indicador = Indicador.objects.filter(categoria__in=self.get_descendants()).first()
+        if indicador:
+            return indicador
+        return self.indicador_set.first()
 
     def __str__(self):
         parent = self.get_parent()

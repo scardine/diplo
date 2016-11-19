@@ -29,6 +29,9 @@ class PainelInline(SortableInlineAdminMixin, admin.StackedInline):
 class DashboardAdmin(SortableAdminMixin, admin.ModelAdmin):
     inlines = (PainelInline,)
     search_fields = ('titulo',)
+    prepopulated_fields = {
+        'slug': ('titulo',),
+    }
 
 
 class LocalidadeAdmin(admin.ModelAdmin):

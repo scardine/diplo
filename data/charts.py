@@ -1,3 +1,4 @@
+# coding=utf-8
 import re
 import pandas as pd
 from collections import OrderedDict
@@ -5,6 +6,7 @@ from collections import OrderedDict
 from bokeh.embed import components
 from bokeh.layouts import gridplot
 from bokeh.models import ColumnDataSource, FactorRange, Range1d, Plot, Rect, CategoricalAxis, LinearAxis, GlyphRenderer
+from bokeh.charts import Line
 from bokeh.resources import CDN
 from django_pandas.io import read_frame
 
@@ -31,26 +33,28 @@ def piramide_populacional(painel):
 
 
     qs_base = Dado.objects.filter(indicador__in=indicadores, localidade=localidade, ano=ano).order_by('indicador__nome')
-    source_dict['Homens'] = pd.to_numeric(read_frame(qs_base.filter(indicador__nome__istartswith='homens')).valor)/1000
+    source_dict['Homens'] = pd.to_numeric(read_frame(qs_base.filter(indicador__nome__istartswith='homens')).valor)
     source_dict['midHomens'] = source_dict['Homens']/2
 
-    source_dict['Mulheres'] = pd.to_numeric(read_frame(qs_base.filter(indicador__nome__istartswith='mulheres')).valor)/1000
+    source_dict['Mulheres'] = pd.to_numeric(read_frame(qs_base.filter(indicador__nome__istartswith='mulheres')).valor)
     source_dict['midMulheres'] = source_dict['Mulheres']/2
 
     source = ColumnDataSource(source_dict)
 
     bar_height = 0.8
-    max_value = float(qs_base.order_by('-valor').first().valor)/400
+    max_value = max(float(d.valor) for d in qs_base.all())
     ydr = FactorRange(factors=cats)
     xdr_left = Range1d(max_value, 0)
     xdr_right = Range1d(0, max_value)
     plot_height = 600
     plot_width = 1108
 
-    plot_left = Plot(title="Homens", x_range=xdr_left, y_range=ydr, plot_height=plot_height,
+    plot_left = Plot(x_range=xdr_left, y_range=ydr, plot_height=plot_height,
                      plot_width=int(plot_width / 2))
-    plot_right = Plot(title="Mulheres", x_range=xdr_right, y_range=ydr, plot_height=plot_height,
+    plot_left.title.text = 'Homens'
+    plot_right = Plot(x_range=xdr_right, y_range=ydr, plot_height=plot_height,
                       plot_width=int(plot_width / 2))
+    plot_right.title.text = 'Mulheres'
 
     plot_left.add_layout(CategoricalAxis(), 'left')
     plot_right.add_layout(LinearAxis(), 'below')
@@ -85,4 +89,22 @@ def piramide_populacional(painel):
 
     script, div = components(g, CDN)
     return {'div': div, 'script': script}
+
+
+def linechart_ano_valor(painel):
+    indicadores = painel.indicadores.all()
+    localidades = painel.localidades.all()
+    if painel.periodos == u'0':
+        qs = Dado.objects.filter(indicador__in=indicadores, localidade__in=localidades)
+    else:
+        anos = [int(ano) for ano in painel.periodos.split(',')]
+        qs = Dado.objects.filter(indicador__in=indicadores, localidade__in=localidades, ano__in=anos)
+
+    df = read_frame(qs)
+    df.valor = pd.to_numeric(df.valor)
+    g = Line(df, x='ano', y='valor', ylabel=u'população', plot_width=1108, plot_height=500)
+    script, div = components(g, CDN)
+    return {'div': div, 'script': script}
+
+
 

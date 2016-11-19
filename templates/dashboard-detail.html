@@ -1,11 +1,43 @@
 {% extends 'index-base.html' %}
 {% load sekizai_tags %}
 {% load diplo %}
+{% load django_markdown %}
 
 {% block conteudo %}
     <div class="container">
-        <h1 class="text-center">{{ object.titulo }}</h1>
-        {% for painel in object.painel_set.all %}
+        <h1 class="text-center">{% if object.icone %}<i class="fa fa-{{ object.icone }}"></i> {% endif %}{{ object.titulo }}</h1>
+        <div class="dashboard-description">
+            {{ object.descricao|markdown }}
+        </div>
+        <ul class="nav nav-tabs">
+            <li role="presentation"{% if localidade.tipo == 'uf' %} class="active"{% endif %}><a href="{% url 'dashboard-detail' slug=object.slug localidade_id=menu_locais.sp.pk %}">Estado de São Paulo</a></li>
+            <li role="presentation" class="dropdown{% if localidade.tipo == 'pesquisa' %} active{% endif %}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">Regiões da Pesquisa <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    {% for reg in menu_locais.regs %}
+                    <li><a href="{% url 'dashboard-detail' slug=object.slug localidade_id=reg.pk %}">{{ reg.nome }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown{% if localidade.tipo == 'munic' %} active{% endif %}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">Municícipos <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    {% for reg, muns in menu_locais.regs.items %}
+                        {% if not forloop.first %}
+                        <li class="divider" role="separator"></li>
+                        {% endif %}
+                        <li class="dropdown-header">{{ reg.nome }}</li>
+                        {% for mun in muns %}
+                            <li><a href="{% url 'dashboard-detail' slug=object.slug localidade_id=mun.pk %}">{{ mun.nome }}</a></li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+
+        <h3 class="text-center">{% if localidade.get_tipo_display != localidade.nome %}<small>{{ localidade.get_tipo_display }}</small>
+            <br>{% endif %}{{ localidade.nome }}</h3>
+        {% for painel in paineis %}
             {% render_panel painel %}
         {% endfor %}
     </div>
