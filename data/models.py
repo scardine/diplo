@@ -136,6 +136,7 @@ class IndicadorFluxo(models.Model):
     complexidade = models.CharField(max_length=30, choices=COMPLEXIDADE)
     especialidade = models.CharField(max_length=100, null=True, blank=True, choices=ESPECIALIDADE, help_text=u'Especialidade do leito')
     subgrupo = models.CharField(max_length=100, help_text=u'Subgrupo de procedimento')
+    menu = models.BooleanField(u"Exibir entrada no menu", default=True)
 
     class Meta:
         verbose_name_plural = u"Indicadores Fluxo"

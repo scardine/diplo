@@ -7,5 +7,5 @@ def menu_context_processor(request):
         "top_menu": MenuItem.objects.filter(depth=1),
         "conteudos_rodape": ConteudoRodape.objects.all(),
         "lista_categorias": Categoria.objects.filter(depth=1),
-        "indicadores_fluxo": IndicadorFluxo.objects.all(),
+        "indicadores_fluxo": IndicadorFluxo.objects.filter(menu=True),
     }

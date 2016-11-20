@@ -23,8 +23,9 @@ class IndicadorAdmin(admin.ModelAdmin):
 
 
 class IndicadorFluxoAdmin(admin.ModelAdmin):
-    list_display = ('subgrupo', 'complexidade', 'especialidade')
-    list_filter = ('complexidade', 'especialidade')
+    list_display = ('subgrupo', 'complexidade', 'especialidade', 'menu',)
+    list_filter = ('complexidade', 'especialidade', 'menu')
+    list_editable = ('menu',)
     search_fields = ('subgrupo',)
     ordering = ('subgrupo',)
 
