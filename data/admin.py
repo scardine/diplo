@@ -3,7 +3,7 @@ from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
-from data.models import Fonte, Tema, Indicador, Dashboard, Painel, Modelo, Localidade, Categoria
+from data.models import Fonte, Tema, Indicador, Dashboard, Painel, Modelo, Localidade, Categoria, IndicadorFluxo
 
 
 class TemaAdmin(SortableAdminMixin, admin.ModelAdmin):
@@ -20,6 +20,13 @@ class IndicadorAdmin(admin.ModelAdmin):
     list_filter = ('tema',)
     search_fields = ('nome', 'descricao', 'observacao',)
     ordering = ('tema', 'nome',)
+
+
+class IndicadorFluxoAdmin(admin.ModelAdmin):
+    list_display = ('subgrupo', 'complexidade', 'especialidade')
+    list_filter = ('complexidade', 'especialidade')
+    search_fields = ('subgrupo',)
+    ordering = ('subgrupo',)
 
 
 class PainelInline(SortableInlineAdminMixin, admin.StackedInline):
@@ -49,6 +56,7 @@ class CategoriaAdmin(TreeAdmin):
 admin.site.register(Tema, TemaAdmin)
 admin.site.register(Fonte, FonteAdmin)
 admin.site.register(Indicador, IndicadorAdmin)
+admin.site.register(IndicadorFluxo, IndicadorFluxoAdmin)
 admin.site.register(Dashboard, DashboardAdmin)
 admin.site.register(Modelo)
 admin.site.register(Localidade, LocalidadeAdmin)

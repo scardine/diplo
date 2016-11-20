@@ -92,8 +92,45 @@ class Dado( models.Model):
         unique_together = (('indicador', 'localidade', 'ano'),)
 
 
+@python_2_unicode_compatible
+class IndicadorFluxo(models.Model):
+    COMPLEXIDADE = (
+        ('', u'N/D ou N/A'),
+        ('media', u'M\xe9dia complexidade'),
+        ('alta', u'Alta complexidade'),
+    )
+    ESPECIALIDADE = (
+        ('cirurgia pediatrica', u'Cir\xfargico pedi\xe1trico (menor de 14 anos)'),
+        ('cirurgia adulto', u'Cir\xfargico adulto (14 anos ou mais)'),
+        ('leito dia', u'Leito Dia'),
+    )
+    complexidade = models.CharField(max_length=30, choices=COMPLEXIDADE)
+    especialidade = models.CharField(max_length=100, null=True, blank=True, choices=ESPECIALIDADE, help_text=u'Especialidade do leito')
+    subgrupo = models.CharField(max_length=100, help_text=u'Subgrupo de procedimento')
+
+    class Meta:
+        verbose_name_plural = u"Indicadores Fluxo"
+        ordering = (u"subgrupo",)
+
+    def dados(self, regionalizacao='munic'):
+        df = read_frame(self.dadofluxo_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
+        df['_'] = df.index.map(unidecode)
+        return df.sort_values(by='_').drop(labels=['_'], axis=1)
+
+    def dataframe(self, regionalizacao='munic'):
+        df = read_frame(self.dadofluxo_set.filter(localidade__tipo=regionalizacao))
+        df.valor = df.valor.astype(float)
+        return df
+
+    def dados_html(self):
+        return self.dados().to_html(classes=['table', 'table-striped'])
+
+    def __str__(self):
+        return self.subgrupo
+
+
 class DadoFluxo(NamedModel):
-    indicador = models.ForeignKey(Indicador)
+    indicador = models.ForeignKey(IndicadorFluxo)
     origem = models.ForeignKey(Localidade, related_name='dados_origem')
     destino = models.ForeignKey(Localidade, related_name='dados_destino')
     ano = models.IntegerField()
