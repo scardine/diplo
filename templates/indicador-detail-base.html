@@ -7,32 +7,18 @@
     {% with tema=object.tema %}
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'indicador-list' tema='' %}">Dados</a></li>
-        <li><a href="{% url 'indicador-list' tema=tema.pk %}">{{ tema.nome }}</a></li>
+        {% if object.categoria %}
+            {% for ancestor in object.categoria.get_ancestors %}
+            <li>{{ ancestor.nome }}</li>
+            {% endfor %}
+            <li>{{ object.categoria.nome }}</li>
+        {% endif %}
         <li class="active"><a href="{% url 'indicador-detail' tema=tema.pk pk=object.pk %}">{{ object.nome }}</a></li>
     {% endwith %}
 {% endblock %}
 
 {% block content %}
-    <script>
-        function recarrega(el) {
-            window.location = '/tema/{% block tipo %}dados{% endblock %}/{{ object.tema_id }}/{{ object.pk }}/' + $('#id_localidades').val() + '/';
-        }
-    </script>
-    <form id="form_tema" action="" class="form form-horizontal">
-        <div class="row">
-            {% bootstrap_field form.localidades layout='horizontal' form_group_class='form-group col-lg-12' %}
-        </div>
-    </form>
-
-    <ul class="nav nav-tabs">
-        <li role="presentation"{% block dados %} class="active"{% endblock %}><a href="{% url 'indicador-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-table"></i> Dados</a></li>
-        <li role="presentation"{% block mapa %}{% endblock %}><a href="{% url 'indicador-map-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-map"></i> Mapas</a></li>
-        <li role="presentation"{% block grafico %}{% endblock %}><a href="{% url 'indicador-chart-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-info-circle"></i> Informações</a></li>
-    </ul>
-    <h1 class="text-center"><small>{{ object.tema }}:</small>
-        <br> {{ object.nome }}</h1>
-    <p class="text-center">
-        <a href="{% url 'download-csv' pk=object.pk regionalizacao=regionalizacao %}" class="btn"><i class="fa fa-download"></i> download</a>
-    </p>
+    <h1 class="text-center"><small>Fluxos:</small>
+        <br> {{ object.subgrupo }}</h1>
 {% endblock %}
 

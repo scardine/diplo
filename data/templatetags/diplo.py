@@ -126,6 +126,11 @@ def to_json(df):
 
 
 @register.filter
+def map_data(indicador, regionalizacao='munic'):
+    return indicador.map_data(regionalizacao)
+
+
+@register.filter
 def get_active(item, request):
     if item.url.endswith('$'):
         url = item.url[:-1]
@@ -145,7 +150,10 @@ def static_page_link(context, item):
 
 @register.filter
 def is_parent(categoria, indicador):
-    return categoria in indicador.categoria.get_ancestors()
+    try:
+        return categoria in indicador.categoria.get_ancestors()
+    except AttributeError:
+        return False
 
 
 @register.filter

@@ -27,6 +27,7 @@ urlpatterns = [
     #url(r'^$', data_views.Home.as_view(), name='home', kwargs={'dashboard': '', 'localidades': 'munic'}),
     url(r'^painel/(?P<slug>[-\w]+)/$', data_views.DashboardDetail.as_view(), name='dashboard-detail'),
     url(r'^painel/(?P<slug>[-\w]+)/(?P<localidade_id>\d+)/$', data_views.DashboardDetail.as_view(), name='dashboard-detail'),
+    url(r'^fluxo/(?P<pk>\d+)/$', data_views.IndicadorFluxoChart.as_view(), name='indicador-fluxo-detail'),
     # url(r'^tema/$', data_views.TemaList.as_view(), name='tema-list'),
     url(r'^tema/mapa/$', data_views.IndicadorMapList.as_view(), name='indicador-map-list', kwargs={'tema': ''}),
     url(r'^tema/$', data_views.IndicadorList.as_view(), name='indicador-list', kwargs={'tema': ''}),

@@ -8,7 +8,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
-from data.models import Tema, Indicador, Dashboard, Localidade, Categoria
+from data.models import Tema, Indicador, Dashboard, Localidade, Categoria, IndicadorFluxo
 from bokeh.charts import Bar
 from bokeh.embed import components
 from bokeh.resources import CDN
@@ -111,16 +111,15 @@ class IndicadorChart(DetailView):
         d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
+        return d
 
-        #dataframe = d['object'].dataframe()
-        #plot = Bar(dataframe, label='ano', values='valor', agg='sum', group='ano', title="Titulo")
-        #plot.logo = None
 
-        #script, div = components(plot, CDN)
-        #d['chart'] = {
-            #'div': div,
-            #'script': script
-        #}
+class IndicadorFluxoChart(DetailView):
+    template_name = 'indicador-detail-fluxo.html'
+    queryset = IndicadorFluxo.objects.all()
+
+    def get_context_data(self, **kwargs):
+        d = super(IndicadorFluxoChart, self).get_context_data(**kwargs)
         return d
 
 

@@ -5,6 +5,10 @@
 
 {% block content %}
     {{ block.super }}
+    <p class="text-center">
+        <a href="{% url 'download-csv' pk=object.pk regionalizacao=regionalizacao %}" class="btn"><i class="fa fa-download"></i> download</a>
+    </p>
+
     <div id="data-table-container">
         {{ object|get_data:regionalizacao|order_df:ordem|to_html:object.formato|safe }}
     </div>
