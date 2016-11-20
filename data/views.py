@@ -138,3 +138,17 @@ class DashboardDetail(DetailView):
     template_name = 'dashboard-detail.html'
     queryset = Dashboard.objects.all()
 
+    def get_context_data(self, **kwargs):
+        d = super(DashboardDetail, self).get_context_data(**kwargs)
+        d['menu_locais'] = {
+            'sp': Localidade.objects.get(tipo='uf'),
+            'regs': {reg:reg.sublocalidades.all() for reg in Localidade.objects.filter(tipo='pesquisa')}
+        }
+        localidade_id = self.kwargs.get('localidade_id')
+        if localidade_id is None:
+            localidade = d['menu_locais']['sp']
+        else:
+            localidade = Localidade.objects.get(pk=localidade_id)
+        d['localidade'] = localidade
+        d['paineis'] = d['object'].painel_set.filter(localidades=localidade)
+        return d

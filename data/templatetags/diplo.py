@@ -8,7 +8,7 @@ from django_pandas.io import read_frame
 from unidecode import unidecode
 import locale
 
-from data.charts import piramide_populacional
+from data.charts import piramide_populacional, linechart_ano_valor
 
 locale.setlocale(locale.LC_NUMERIC, '')
 
@@ -125,22 +125,28 @@ def to_json(df):
     return df.to_json()
 
 
-@register.simple_tag(takes_context=True)
-def static_page_link(context, url, label):
-    if url.endswith('$'):
-        url = url[:-1]
-        active = context['request'].path == url
+@register.filter
+def get_active(item, request):
+    if item.url.endswith('$'):
+        url = item.url[:-1]
+        active = request.path == url
     else:
-        active = context['request'].path.startswith(url)
+        url = item.url
+        active = request.path.startswith(url)
+    return {"url": url, "active": active}
+
+
+@register.simple_tag(takes_context=True)
+def static_page_link(context, item):
     context = context.flatten()
-    context['url'] = url
-    context['label'] = label
-    context['active'] = active
+    context['item'] = item
     return mark_safe(render_to_string('static-page-link.html', context=context))
+
 
 @register.filter
 def is_parent(categoria, indicador):
     return categoria in indicador.categoria.get_ancestors()
+
 
 @register.filter
 def ul_split(s, splitchar=','):
@@ -151,3 +157,8 @@ def ul_split(s, splitchar=','):
 @register.filter
 def plota_piramide(painel):
     return piramide_populacional(painel)
+
+
+@register.filter
+def plota_linha_ano_valor(painel):
+    return linechart_ano_valor(painel)

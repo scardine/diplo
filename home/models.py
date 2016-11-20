@@ -3,18 +3,17 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils.six import python_2_unicode_compatible
+from treebeard.mp_tree import MP_Node
 
 
 @python_2_unicode_compatible
-class MenuItem(models.Model):
-    ordem = models.PositiveIntegerField(default=0)
+class MenuItem(MP_Node):
     label = models.CharField(max_length=60)
     url = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = u"Ítem de menu"
         verbose_name_plural = u"Ítens de menu"
-        ordering = ('ordem',)
 
     def __str__(self):
         return self.label

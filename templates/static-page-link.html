@@ -1,5 +1,23 @@
 {% spaceless %}
-<li {% if active %}class="active"{% endif %}>
-    <a href="{{ url }}">{{ label }}{% if active %} <span class="sr-only">(current)</span>{% endif %}</a>
-</li>
+{% load diplo %}
+{% with trunk=item|get_active:request %}
+{% if item.numchild %}
+    <li class="dropdown{% if trunk.active %} active{% endif %}">
+        <a href="#" class="dropdown-togle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ item.label }}{% if trunk.active %} <span class="sr-only">(current)</span>{% endif %} <i class="fa fa-caret-down"></i></a>
+        <ul class="dropdown-menu">
+            {% for child in item.get_children %}
+                {% with leaf=child|get_active:request %}
+                    <li {% if leaf.active %}class="active"{% endif %}>
+                        <a href="{{ leaf.url }}">{{ child.label }}{% if leaf.active %} <span class="sr-only">(current)</span>{% endif %}</a>
+                    </li>
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </li>
+{% else %}
+    <li {% if trunk.active %}class="active"{% endif %}>
+        <a href="{{ trunk.url }}">{{ item.label }}{% if pai.active %} <span class="sr-only">(current)</span>{% endif %}</a>
+    </li>
+{% endif %}
+{% endwith %}
 {% endspaceless %}
