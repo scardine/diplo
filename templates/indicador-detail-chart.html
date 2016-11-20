@@ -38,16 +38,6 @@
         </table>
         <p></p>
         <hr>
-        <div id="vis">{{ chart.div|safe }}</div>
     </div>
 {% endblock %}
 
-{% block extra %}
-    {% addtoblock 'css' %}
-        <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
-    {% endaddtoblock%}
-    {% addtoblock 'js' %}
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
-    {{ chart.script|safe }}
-    {% endaddtoblock %}
-{% endblock %}

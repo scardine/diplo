@@ -67,8 +67,10 @@ body {
   border-right: $borda-menu;
 }
 
-#wrapper.toggled #sidebar-wrapper {
-  width: $width;
+#wrapper.toggled {
+  #sidebar-wrapper {
+    width: $width;
+  }
 }
 
 #page-content-wrapper {
