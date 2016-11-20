@@ -161,7 +161,7 @@ class IndicadorFluxo(models.Model):
         return self.subgrupo
 
 
-class DadoFluxo(NamedModel):
+class DadoFluxo(models.Model):
     indicador = models.ForeignKey(IndicadorFluxo)
     origem = models.ForeignKey(Localidade, related_name='dados_origem')
     destino = models.ForeignKey(Localidade, related_name='dados_destino')

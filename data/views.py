@@ -120,7 +120,16 @@ class IndicadorFluxoChart(DetailView):
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorFluxoChart, self).get_context_data(**kwargs)
+        d['fluxo'] = d['object']
         return d
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        pk = self.kwargs.get('pk', '*')
+        if pk == '*':
+            return queryset.first()
+        return queryset.get(pk=pk)
 
 
 class CategoriaDetail(DetailView):

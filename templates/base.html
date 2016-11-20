@@ -58,15 +58,22 @@
                         Paineis Temáticos</a>
                 </li>
                 <li>
-                    <a href="{% url 'home' %}">
+                    <a href="#lista-de-fluxos" {% if not object or object != fluxo %}class="collapsed" {% endif %}data-toggle="collapse" role="button" aria-expanded="false" aria-controls="lista-de-temas">
                         <i class="fa fa-exchange"></i>
                         Fluxos</a>
+                    <div id="lista-de-fluxos" class="{% if object == fluxo %}in {% endif %}collapse">
+                        <ul class="nav level-1">
+                            {% for indicador in indicadores_fluxo %}
+                            <li{% if indicador == object %} class="active"{% endif %}><a href="{% url 'indicador-fluxo-detail' pk=indicador.pk %}">{{ indicador.subgrupo }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </li>
                 <li>
-                    <a href="#lista-de-temas" {% if not object %}class="collapsed"{% endif %} data-toggle="collapse" role="button" expanded="false" aria-controls="lista-de-temas">
+                    <a href="#lista-de-temas" {% if not object or object == fluxo %}class="collapsed"{% endif %} data-toggle="collapse" role="button" aria-expanded="false" aria-controls="lista-de-temas">
                         <i class="fa fa-foo"></i>
                         Indicadores</a>
-                    <div id="lista-de-temas" class="{% if object %}in {% endif %}collapse">
+                    <div id="lista-de-temas" class="{% if object and object != fluxo %}in {% endif %}collapse">
                         <ul class="nav level-1">
                             {% for entry in lista_categorias %}
                                 {% include 'categoria-menu-entry.html' with entry=entry %}

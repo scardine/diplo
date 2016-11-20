@@ -120,6 +120,10 @@ a.collapsed > i.fa-foo:before { content: "\f054"; }
   text-indent: 0;
   line-height: 35px;
   & > a { padding: 0 0 0 50px; }
+  &.active {
+    background-color: #337ab7;
+    & > a { color: #fff; }
+  }
 }
 
 .nav.level-2 > li {

@@ -6,11 +6,11 @@ from collections import OrderedDict
 from bokeh.embed import components
 from bokeh.layouts import gridplot
 from bokeh.models import ColumnDataSource, FactorRange, Range1d, Plot, Rect, CategoricalAxis, LinearAxis, GlyphRenderer
-from bokeh.charts import Line
+from bokeh.charts import Line, HeatMap
 from bokeh.resources import CDN
 from django_pandas.io import read_frame
 
-from data.models import Dado
+from data.models import Dado, IndicadorFluxo
 
 
 def piramide_populacional(painel):
@@ -104,6 +104,19 @@ def linechart_ano_valor(painel):
     df.valor = pd.to_numeric(df.valor)
     g = Line(df, x='ano', y='valor', ylabel=u'população', plot_width=1108, plot_height=500)
     script, div = components(g, CDN)
+    return {'div': div, 'script': script}
+
+
+def heatmap_chart_indicador(indicador):
+    df = read_frame(indicador.dadofluxo_set.all())
+    df.valor = df.valor.astype(float)
+    g = HeatMap(
+        df,
+        x='origem', y='destino', values='valor', stat=None,
+        sort_dim={'x': False},
+        width=1005, plot_height=1005
+    )
+    script, div = components(g)
     return {'div': div, 'script': script}
 
 

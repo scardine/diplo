@@ -93,6 +93,10 @@ a.collapsed > i.fa-foo:before {
   line-height: 35px; }
   .nav.level-1 > li > a {
     padding: 0 0 0 50px; }
+  .nav.level-1 > li.active {
+    background-color: #337ab7; }
+    .nav.level-1 > li.active > a {
+      color: #fff; }
 
 .nav.level-2 > li {
   text-indent: 0;
