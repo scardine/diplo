@@ -2,6 +2,7 @@
 <html lang="en">
 {% load static bootstrap3 %}
 {% load sekizai_tags %}
+{% load diplo %}
 <head>
 
     <meta charset="utf-8">
@@ -53,9 +54,17 @@
                         Home</a>
                 </li>
                 <li>
-                    <a href="{% url 'home' %}">
+                    <a href="#lista-de-paineis" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="lista-de-paineis">
                         <i class="fa fa-dashboard"></i>
                         Paineis Temáticos</a>
+                    <div id="lista-de-paineis" class="collapse">
+                        <ul class="nav level-1">
+                            {% for item in menu_paineis %}
+                                {% static_page_link item %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+
                 </li>
                 <li>
                     <a href="#lista-de-fluxos" {% if not object or object != fluxo %}class="collapsed" {% endif %}data-toggle="collapse" role="button" aria-expanded="false" aria-controls="lista-de-temas">

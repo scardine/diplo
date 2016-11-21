@@ -13,12 +13,30 @@
 {% block content %}
     {% addtoblock 'css' %}
         <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
+        <style>
+        div.scrollbars {
+            width: 100%;
+            height: 1005px;
+            overflow: scroll;
+        }
+        div.scrollbars div {
+            width: 15000px;
+        }
+        div.scrollbars div table {
+            width: auto;
+        }
+        div.scrollbars div table tr th {
+            width: 300px;
+        }
+        </style>
     {% endaddtoblock %}
     {% addtoblock 'js' %}
         <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
     {% endaddtoblock %}
 
-    {{ block.super }}
+    <h1 class="text-center"><small>Fluxos:</small>
+        <br> {{ object.subgrupo }}</h1>
+
     <div id="data-table-container">
         {% with chart=object|plota_heatmap_fluxo %}
         <div id="vis">{{ chart.div|safe }}</div>
@@ -26,5 +44,17 @@
             {{ chart.script|safe }}
         {% endaddtoblock %}
         {% endwith %}
+    </div>
+
+    <h3 class="text-center">Dados</h3>
+    <p class="text-center">
+        <a href="{% url 'download-fluxo-csv' pk=object.pk %}" class="btn"><i class="fa fa-download"></i> download</a>
+    </p>
+    <div id="data-table-container">
+        <div class="scrollbars">
+            <div>
+                {{ object.dados_html|safe }}
+            </div>
+        </div>
     </div>
 {% endblock %}

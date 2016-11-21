@@ -102,6 +102,17 @@ def download_csv(request, pk, regionalizacao):
     return r
 
 
+def download_fluxo_csv(request, pk):
+    indicador = get_object_or_404(IndicadorFluxo, pk=pk)
+    df = indicador.dados().replace([None], ['-'])
+    r = HttpResponse(content_type='text/csv')
+    r['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
+        slugify(indicador.subgrupo),
+    )
+    df.to_csv(r, sep=';', decimal=',', encoding='iso-8859-1')
+    return r
+
+
 class IndicadorChart(DetailView):
     template_name = 'indicador-detail-chart.html'
     queryset = Indicador.objects.all()
