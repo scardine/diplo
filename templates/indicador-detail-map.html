@@ -55,19 +55,24 @@
                 pesquisa: { key: 'regsnome'},
             };
             var dados = {{ object|map_data:regionalizacao|safe }};
+            function hover(ano) {
+                return function(d) {
+                    return d.localidade + ": " + d[ano];
+                }
+            }
             var map = mapmap('#map-holder')
                     .geometry('/static/geo/{{ regionalizacao }}.topojson', meta.{{ regionalizacao }}.key)
                     .meta(dados.meta)
                     .data(dados.series, 'localidade')
                     .choropleth(dados.anos[0])
                     .legend(mapmap.legend.html())
-                    .hoverInfo(['localidade', dados.anos[0]])
+                    .hoverInfo(hover(dados.anos[0]))
                     .applyBehavior(mapmap.behavior.zoom());
             var seletor = $('.seletor-ano button');
             seletor.click(function() {
                 var el = $(this);
                 var ano = el.attr('rel');
-                map.choropleth(ano).hoverInfo(['localidade', ano]);
+                map.choropleth(ano).hoverInfo(hover(ano));
                 seletor.removeClass('btn-primary').addClass('btn-default');
                 el.removeClass('btn-default').addClass('btn-primary');
             });

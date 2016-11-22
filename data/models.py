@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import json
-from collections import OrderedDict
 
 from django.template import Template, Context
 
@@ -94,14 +93,12 @@ class Indicador(NamedModel):
             "series": [],
         }
         if self.tipo == "categorico":
-            dominio = OrderedDict()
-            for i, v in enumerate(sorted(d1.valor.unique())):
-                dominio[v] = "C{}".format(i)
+            dominio = list(d1.valor.unique())
             r["meta"] = {
                 '*': {
                     'scale': 'ordinal',
-                    'domain': dominio.values(),
-                    'valueLabels': dominio.keys(),
+                    'domain': dominio,
+                    'valueLabels': dominio,
                     'colors': colorbrewer['Set1'][9][:len(dominio)]
                 },
             }
@@ -118,9 +115,6 @@ class Indicador(NamedModel):
                 }
         for line in df.iterrows():
             d = dict(line[1])
-            if self.tipo == "categorico":
-                for k, v in d.items():
-                    d[k] = dominio[v]
             d['localidade'] = line[0]
             r["series"].append(d)
         return json.dumps(r)
