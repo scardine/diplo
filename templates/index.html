@@ -4,6 +4,9 @@
 {% load sekizai_tags %}
 
 {% block conteudo %}
+    {% addtoblock 'css' %}
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% endaddtoblock %}
     {% addtoblock 'style' %}
         #bigphoto {
         background-image: url({% static 'img/medico.jpg' %});
@@ -31,23 +34,15 @@
         padding: 120px 30px 30px;
         transition: background-color 0.8s;
         }
+        a.card div {
+            position: absolute;
+            bottom: 0;
+            width: 80%;
+        }
         .card.card-0 {
         background-color: rgba(11, 94, 86, 0.5);
         padding: 30px;
         }
-        .card-0:hover { background-color: #0b5e56;}
-        .card-1:hover { background-color: #00d2ff;}
-        .card-2:hover { background-color: #b2e5e5;}
-        .card-3:hover { background-color: #86becb;}
-        .card-4:hover { background-color: #1aa3a3;}
-        .card-5:hover { background-color: #0b5e56;}
-        .card-6:hover { background-color: #b2e5e5;}
-        .card-1 { background-color: rgba(0, 210, 255, 0.5);}
-        .card-2 { background-color: rgba(178,229,229, 0.5);}
-        .card-3 { background-color: rgba(134,190,203, 0.5);}
-        .card-4 { background-color: rgba(26,163,163, 0.5);}
-        .card-5 { background-color: rgba(11,94,86, 0.5);}
-        .card-6 { background-color: rgba(178,229,229, 0.5);}
     {% endaddtoblock %}
 
 <div id="bigphoto">
@@ -62,15 +57,17 @@
             </div>
         {% endwith %}
         <div class="row cards">
-            <a href="{% url 'indicador-fluxo-detail' pk='*' %}" class="card col-xs-12 card-0">
-                <h3>{{ fluxos.nome }}</h3>
-                <p>{{ fluxos.subtitulo }}</p>
+            <a href="{% url 'dado-primario-list' %}" class="card col-xs-12 card-0">
+                <h3>Dados primários</h3>
+                <p>Fontes de dados da pesquisa</p>
             </a>
             {% for categoria in categorias|slice:'0:6' %}
                 {% with indicador=categoria.indicador %}
                 <a {% if indicador %}href="{% url 'indicador-detail' tema=indicador.tema_id pk=indicador.pk %}" {% endif %}class="card col-lg-4 col-md-6 card-{% cycle 1 2 3 4 5 6 %}">
-                    <h3>{{ categoria.nome }}</h3>
-                    <p>{{ categoria.subtitulo }}</p>
+                    <div>
+                        <h3>{{ categoria.nome }}</h3>
+                        <p>{{ categoria.subtitulo }}</p>
+                    </div>
                 </a>
 
                 {% endwith %}
@@ -80,13 +77,15 @@
 </div>
 {% if categorias|length > 6 %}
     <div class="container">
-        <div class="row">
+        <div class="row" style="background-color: gray">
             {% for categoria in categorias|slice:'6:' %}
                 {% with indicador=categoria.indicador %}
                     {% if indicador %}
                     <a href="{% url 'indicador-detail' tema=indicador.tema_id pk=indicador.pk %}" class="card col-lg-4 col-md-6 card-{% cycle 1 2 3 4 5 6 %}">
-                        <h3>{{ categoria.nome }}</h3>
-                        <p>{{ categoria.subtitulo }}</p>
+                        <div>
+                            <h3>{{ categoria.nome }}</h3>
+                            <p>{{ categoria.subtitulo }}</p>
+                        </div>
                     </a>
                     {% endif %}
                 {% endwith %}
@@ -94,6 +93,15 @@
         </div>
     </div>
 {% endif %}
+<div class="container">
+    <div class="row">
+        <a href="{% url 'indicador-fluxo-detail' pk='*' %}" class="card col-xs-12 card-0">
+            <h3>{{ fluxos.nome }}</h3>
+            <p>{{ fluxos.subtitulo }}</p>
+        </a>
+    </div>
+</div>
+
 {% for conteudo in conteudos|slice:'1:' %}
     <hr>
     <div class="container {{ conteudo.css }}">

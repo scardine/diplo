@@ -244,4 +244,17 @@ class Categoria(MP_Node):
         return self.nome
 
 
+@python_2_unicode_compatible
+class DadoPrimario(models.Model):
+    nome = models.CharField(max_length=300)
+    descricao = models.TextField(null=True, blank=True)
+    ordem = models.PositiveIntegerField(default=1)
+    arquivo = models.FileField(upload_to='dados-primarios')
 
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name_plural = u'Dados Primários'
+        verbose_name = u'Dado Primário'
+        ordering = ('ordem',)

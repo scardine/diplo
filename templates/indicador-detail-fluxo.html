@@ -10,49 +10,60 @@
     <li class="active"><a>{{ object.subgrupo }}</a></li>
 {% endblock %}
 
-{% block content %}
+{% with chart=object|plota_heatmap_fluxo %}
+{% block extra %}
     {% addtoblock 'css' %}
         <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
         <style>
-        div.scrollbars {
-            width: 100%;
-            overflow: scroll;
-        }
-        div.scrollbars div {
-            width: 15000px;
-        }
-        div.scrollbars div table {
-            width: auto;
-        }
-        div.scrollbars div table tr th {
-            width: 300px;
-        }
+            div.scrollbars {
+                width: 100%;
+                overflow: scroll;
+            }
+            div.scrollbars div {
+                width: 15000px;
+            }
+            div.scrollbars div table {
+                width: auto;
+            }
+            div.scrollbars div table tr th {
+                width: 300px;
+            }
         </style>
     {% endaddtoblock %}
     {% addtoblock 'js' %}
         <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+        <script>
+            function toggle_aba(el) {
+                el = $(el);
+                el.parent().siblings().removeClass('active');
+                el.parent().addClass('active');
+                $('.div-conteudo').toggle();
+                return false;
+            }
+        </script>
+    {% endaddtoblock %}
+    {% addtoblock 'js' %}
+        {{ chart.script|safe }}
     {% endaddtoblock %}
 
+{% endblock %}
+
+{% block content %}
     <h1 class="text-center"><small>Fluxos:</small>
         <br> {{ object.subgrupo }}</h1>
 
     <ul class="nav nav-tabs">
-        <li id="li-grafico" role="presentation" class="active"><a href="javascript: $('#div-tabela').hide(); $('#div-grafico').show(); $('#li-tabela').removeClass('active'); $('#li-grafico').addClass('active');"><i class="fa fa-bar-chart"></i> Matriz de Adjacência</a></li>
-        <li id="li-tabela" role="presentation"><a href="javascript: $('#div-grafico').hide(); $('#div-tabela').show(); $('#li-grafico').removeClass('active'); $('#li-tabela').addClass('active');"><i class="fa fa-table"></i> Dados</a></li>
+        <li id="li-grafico" role="presentation" class="active"><a href="#" onclick="toggle_aba(this)"><i class="fa fa-bar-chart"></i> Matriz de Adjacência</a></li>
+        <li id="li-tabela" role="presentation"><a href="#" onclick="toggle_aba(this)"><i class="fa fa-table"></i> Dados</a></li>
     </ul>
 
     <div id="data-table-container">
         <p></p>
-        <div id="div-grafico">
-            {% with chart=object|plota_heatmap_fluxo %}
+        <div id="div-grafico" class="div-conteudo">
                 <div id="vis">{{ chart.div|safe }}</div>
-                {% addtoblock 'js' %}
-                    {{ chart.script|safe }}
-                {% endaddtoblock %}
-            {% endwith %}
         </div>
 
-        <div id="div-tabela" style="display: none">
+        <div id="div-tabela" style="display: none" class="div-conteudo">
             <p class="text-center">
                 <a href="{% url 'download-fluxo-csv' pk=object.pk %}" class="btn"><i class="fa fa-download"></i> download</a>
             </p>
@@ -69,3 +80,4 @@
 
 
 {% endblock %}
+{% endwith %}

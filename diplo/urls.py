@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^tema/dados/(?P<tema>\d+)/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.IndicadorDetail.as_view(), name='indicador-detail'),
     url(r'^tema/dados/(?P<tema>\d+)/$', data_views.IndicadorList.as_view(), name='indicador-list'),
     url(r'^download/dados/(?P<pk>\d+)/(?P<regionalizacao>\w+)/$', data_views.download_csv, name='download-csv'),
+    url(r'^dados-primarios/', data_views.DadoPrimarioList.as_view(), name='dado-primario-list'),
     url(r'^conteudo/', include('django.contrib.flatpages.urls')),
     url(r'^markdown/', include( 'django_markdown.urls')),
     url(r'^admin/', admin.site.urls),

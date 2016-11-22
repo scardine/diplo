@@ -8,7 +8,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from data.forms import TemaLocalForm, DashboardLocalForm
-from data.models import Tema, Indicador, Dashboard, Localidade, Categoria, IndicadorFluxo
+from data.models import Tema, Indicador, Dashboard, Localidade, Categoria, IndicadorFluxo, DadoPrimario
 from bokeh.charts import Bar
 from bokeh.embed import components
 from bokeh.resources import CDN
@@ -171,3 +171,8 @@ class DashboardDetail(DetailView):
         d['localidade'] = localidade
         d['paineis'] = d['object'].painel_set.filter(localidades=localidade)
         return d
+
+
+class DadoPrimarioList(ListView):
+    template_name = 'dado-primario-list.html'
+    queryset = DadoPrimario.objects.all()

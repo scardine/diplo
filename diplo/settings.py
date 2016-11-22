@@ -143,4 +143,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/app/diplo/static'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/var/app/diplo/media'
 from local_settings import *

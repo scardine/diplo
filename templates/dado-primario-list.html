@@ -1,0 +1,13 @@
+{% extends 'index-base.html' %}
+{% load django_markdown %}
+{% load static %}
+{% block conteudo %}
+    <div class="container">
+        <h1>Dados Primários</h1>
+        {% for object in object_list %}
+        <h2>{{ object.nome }}</h2>
+        {{ object.descricao|markdown }}
+        <p><a href="{{ object.arquivo.url }}" class="btn btn-primary"><i class="fa fa-download"></i>  Download</a></p>
+        {% endfor %}
+    </div>
+{% endblock %}
