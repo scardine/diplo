@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+from collections import OrderedDict
 
 from django.template import Template, Context
 
@@ -60,6 +61,10 @@ class Localidade(NamedModel):
 
 
 class Indicador(NamedModel):
+    TIPO = (
+        ('quantitativo', u"Quantitativo"),
+        ('categorico', u"Categórico"),
+    )
     descricao = models.TextField(u"Descrição", null=True, blank=True)
     observacao = models.TextField(u"Observações", null=True, blank=True)
     periodo = models.CharField(max_length=250, null=True, blank=True)
@@ -67,6 +72,7 @@ class Indicador(NamedModel):
     fonte = models.ForeignKey(Fonte)
     tema = models.ForeignKey(Tema)
     categoria = models.ForeignKey('Categoria', null=True)
+    tipo = models.CharField(max_length=30, choices=TIPO, default="quantitativo")
 
     class Meta:
         verbose_name_plural = u"Indicadores"
@@ -81,23 +87,40 @@ class Indicador(NamedModel):
         return self.periodo.split(',')
 
     def map_data(self, regionalizacao='munic'):
-        df = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao)).pivot(index='localidade', columns='ano', values='valor')
+        d1 = read_frame(self.dado_set.filter(localidade__tipo=regionalizacao))
+        df = d1.pivot(index='localidade', columns='ano', values='valor')
         r = {
             "anos": [str(_) for _ in df.columns.values],
             "series": [],
-            "meta": {
+        }
+        if self.tipo == "categorico":
+            dominio = OrderedDict()
+            for i, v in enumerate(sorted(d1.valor.unique())):
+                dominio[v] = "C{}".format(i)
+            r["meta"] = {
+                '*': {
+                    'scale': 'ordinal',
+                    'domain': dominio.values(),
+                    'valueLabels': dominio.keys(),
+                    'colors': colorbrewer['Set1'][9][:len(dominio)]
+                },
+            }
+        else:
+            r["meta"] = {
                 '*': {
                     'scale': 'quantile',
                     'colors': colorbrewer['YlGnBu'][7]
                 },
             }
-        }
-        for ano in r["anos"]:
-            r["meta"][ano] = {
-                "domain": sorted(v.strip() for v in df[int(ano)].unique() if v.strip())
-            }
+            for ano in r["anos"]:
+                r["meta"][ano] = {
+                    "domain": sorted(v.strip() for v in df[int(ano)].unique() if v.strip())
+                }
         for line in df.iterrows():
             d = dict(line[1])
+            if self.tipo == "categorico":
+                for k, v in d.items():
+                    d[k] = dominio[v]
             d['localidade'] = line[0]
             r["series"].append(d)
         return json.dumps(r)

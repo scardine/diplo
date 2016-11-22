@@ -10,45 +10,38 @@
     <li class="active"><a>{{ object.subgrupo }}</a></li>
 {% endblock %}
 
-{% with chart=object|plota_heatmap_fluxo %}
-{% block extra %}
+{% block content %}
     {% addtoblock 'css' %}
         <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" rel="stylesheet" type="text/css">
         <style>
-            div.scrollbars {
-                width: 100%;
-                overflow: scroll;
-            }
-            div.scrollbars div {
-                width: 15000px;
-            }
-            div.scrollbars div table {
-                width: auto;
-            }
-            div.scrollbars div table tr th {
-                width: 300px;
-            }
+        div.scrollbars {
+            width: 100%;
+            overflow: scroll;
+        }
+        div.scrollbars div {
+            width: 15000px;
+        }
+        div.scrollbars div table {
+            width: auto;
+        }
+        div.scrollbars div table tr th {
+            width: 300px;
+        }
         </style>
     {% endaddtoblock %}
     {% addtoblock 'js' %}
         <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
         <script>
-            function toggle_aba(el) {
-                el = $(el);
-                el.parent().siblings().removeClass('active');
-                el.parent().addClass('active');
-                $('.div-conteudo').toggle();
-                return false;
-            }
+        function toggle_aba(el) {
+            el = $(el);
+            el.parent().siblings().removeClass('active');
+            el.parent().addClass('active');
+            $('.div-conteudo').toggle();
+            return false;
+        }
         </script>
     {% endaddtoblock %}
-    {% addtoblock 'js' %}
-        {{ chart.script|safe }}
-    {% endaddtoblock %}
 
-{% endblock %}
-
-{% block content %}
     <h1 class="text-center"><small>Fluxos:</small>
         <br> {{ object.subgrupo }}</h1>
 
@@ -60,7 +53,12 @@
     <div id="data-table-container">
         <p></p>
         <div id="div-grafico" class="div-conteudo">
+            {% with chart=object|plota_heatmap_fluxo %}
                 <div id="vis">{{ chart.div|safe }}</div>
+                {% addtoblock 'js' %}
+                    {{ chart.script|safe }}
+                {% endaddtoblock %}
+            {% endwith %}
         </div>
 
         <div id="div-tabela" style="display: none" class="div-conteudo">
@@ -80,4 +78,3 @@
 
 
 {% endblock %}
-{% endwith %}
