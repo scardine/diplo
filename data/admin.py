@@ -54,7 +54,14 @@ class CategoriaAdmin(TreeAdmin):
     list_editable = ('home', 'menu',)
 
 
+class PainelAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'dashboard')
+    search_fields = ('titulo',)
+    list_filter = ('dashboard',)
+
+
 admin.site.register(Tema, TemaAdmin)
+admin.site.register(Painel, PainelAdmin)
 admin.site.register(Fonte, FonteAdmin)
 admin.site.register(Indicador, IndicadorAdmin)
 admin.site.register(IndicadorFluxo, IndicadorFluxoAdmin)

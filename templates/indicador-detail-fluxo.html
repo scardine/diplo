@@ -16,7 +16,6 @@
         <style>
         div.scrollbars {
             width: 100%;
-            height: 1005px;
             overflow: scroll;
         }
         div.scrollbars div {
@@ -37,24 +36,36 @@
     <h1 class="text-center"><small>Fluxos:</small>
         <br> {{ object.subgrupo }}</h1>
 
-    <div id="data-table-container">
-        {% with chart=object|plota_heatmap_fluxo %}
-        <div id="vis">{{ chart.div|safe }}</div>
-        {% addtoblock 'js' %}
-            {{ chart.script|safe }}
-        {% endaddtoblock %}
-        {% endwith %}
-    </div>
+    <ul class="nav nav-tabs">
+        <li id="li-grafico" role="presentation" class="active"><a href="javascript: $('#div-tabela').hide(); $('#div-grafico').show(); $('#li-tabela').removeClass('active'); $('#li-grafico').addClass('active');"><i class="fa fa-bar-chart"></i> Matriz de Adjacência</a></li>
+        <li id="li-tabela" role="presentation"><a href="javascript: $('#div-grafico').hide(); $('#div-tabela').show(); $('#li-grafico').removeClass('active'); $('#li-tabela').addClass('active');"><i class="fa fa-table"></i> Dados</a></li>
+    </ul>
 
-    <h3 class="text-center">Dados</h3>
-    <p class="text-center">
-        <a href="{% url 'download-fluxo-csv' pk=object.pk %}" class="btn"><i class="fa fa-download"></i> download</a>
-    </p>
     <div id="data-table-container">
-        <div class="scrollbars">
+        <p></p>
+        <div id="div-grafico">
+            {% with chart=object|plota_heatmap_fluxo %}
+                <div id="vis">{{ chart.div|safe }}</div>
+                {% addtoblock 'js' %}
+                    {{ chart.script|safe }}
+                {% endaddtoblock %}
+            {% endwith %}
+        </div>
+
+        <div id="div-tabela" style="display: none">
+            <p class="text-center">
+                <a href="{% url 'download-fluxo-csv' pk=object.pk %}" class="btn"><i class="fa fa-download"></i> download</a>
+            </p>
             <div>
-                {{ object.dados_html|safe }}
+                <p></p>
+                <div class="scrollbars">
+                    <div>
+                        {{ object.dados_html|safe }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 {% endblock %}
