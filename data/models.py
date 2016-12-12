@@ -62,8 +62,9 @@ class Localidade(NamedModel):
 
 class Indicador(NamedModel):
     TIPO = (
-        ('quantitativo', u"Quantitativo"),
+        ('quantitativo', u"Quantitativo - quantil"),
         ('categorico', u"Categórico"),
+        ('ordinal', u"Quantitativo - ordinal"),
     )
     descricao = models.TextField(u"Descrição", null=True, blank=True)
     observacao = models.TextField(u"Observações", null=True, blank=True)
@@ -103,7 +104,7 @@ class Indicador(NamedModel):
                     'colors': colorbrewer['Set1'][9][:len(dominio)]
                 },
             }
-        else:
+        elif self.tipo == "quantitativo":
             r["meta"] = {
                 '*': {
                     'scale': 'quantile',
@@ -114,6 +115,19 @@ class Indicador(NamedModel):
                 r["meta"][ano] = {
                     "domain": sorted(v.strip() for v in df[int(ano)].unique() if v.strip())
                 }
+        else:
+            r["meta"] = {
+                '*': {
+                    'scale': 'threshold',
+                    'colors': colorbrewer['YlGnBu'][5],
+                    'numberFormat': ',.02f',
+                },
+            }
+            for ano in r["anos"]:
+                r["meta"][ano] = {
+                    "domain": [20, 40, 60, 80, 100]
+                }
+
         for line in df.iterrows():
             d = dict(line[1])
             d['localidade'] = line[0]

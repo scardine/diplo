@@ -71,7 +71,7 @@ class IndicadorDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorDetail, self).get_context_data(**kwargs)
-        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'regsau')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
@@ -83,7 +83,7 @@ class IndicadorMap(DetailView):
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorMap, self).get_context_data(**kwargs)
-        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'regsau')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d
@@ -119,7 +119,7 @@ class IndicadorChart(DetailView):
 
     def get_context_data(self, **kwargs):
         d = super(IndicadorChart, self).get_context_data(**kwargs)
-        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'munic')
+        d['regionalizacao'] = self.kwargs.get('regionalizacao', 'regsau')
         d['form'] = TemaLocalForm(initial={'localidades': d['regionalizacao']})
         d['ordem'] = self.request.GET.get('o', 'localidade')
         return d

@@ -35,7 +35,7 @@
         <li role="presentation"{% block mapa %}{% endblock %}><a href="{% url 'indicador-map-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-map"></i> Mapas</a></li>
         <li role="presentation"{% block grafico %}{% endblock %}><a href="{% url 'indicador-chart-detail' tema=object.tema_id pk=object.pk regionalizacao=regionalizacao %}"><i class="fa fa-info-circle"></i> Informações</a></li>
     </ul>
-    <h1 class="text-center"><small>{{ object.tema }}:</small>
+    <h1 class="text-center"><small>{{ object.categoria }}:</small>
         <br> {{ object.nome }}</h1>
     {% endif %}
 {% endblock %}
