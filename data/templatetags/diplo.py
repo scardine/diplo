@@ -8,7 +8,8 @@ from django_pandas.io import read_frame
 from unidecode import unidecode
 import locale
 
-from data.charts import piramide_populacional, linechart_ano_valor, heatmap_chart_indicador
+from data.charts import piramide_populacional, linechart_ano_valor, heatmap_chart_indicador, pie_chart_simples, \
+    bar_chart_localidade
 
 locale.setlocale(locale.LC_NUMERIC, '')
 
@@ -176,3 +177,12 @@ def plota_linha_ano_valor(painel):
 def plota_heatmap_fluxo(indicador):
     return heatmap_chart_indicador(indicador)
 
+
+@register.filter
+def plota_pie_simples(painel):
+    return pie_chart_simples(painel).render_data_uri()
+
+
+@register.filter
+def plota_bar_simples(painel):
+    return bar_chart_localidade(painel).render_data_uri()

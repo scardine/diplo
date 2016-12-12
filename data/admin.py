@@ -24,11 +24,11 @@ class IndicadorAdmin(admin.ModelAdmin):
 
 
 class IndicadorFluxoAdmin(admin.ModelAdmin):
-    list_display = ('subgrupo', 'complexidade', 'especialidade', 'menu',)
-    list_filter = ('complexidade', 'especialidade', 'menu')
+    list_display = ('nome', 'categoria', 'menu',)
+    list_filter = ('menu',)
     list_editable = ('menu',)
-    search_fields = ('subgrupo',)
-    ordering = ('subgrupo',)
+    search_fields = ('nome',)
+    ordering = ('nome',)
 
 
 class PainelInline(SortableInlineAdminMixin, admin.StackedInline):

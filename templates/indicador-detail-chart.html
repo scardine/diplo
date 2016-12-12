@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load static %}
 {% load sekizai_tags %}
+{% load django_markdown %}
 
 {% block dados %}{% endblock %}
 {% block tipo %}grafico{% endblock %}
@@ -24,11 +25,19 @@
             </tr>
             <tr>
                 <th class="text-right">Fonte:</th>
-                <td>{{ object.fonte|default:'N/D' }}</td>
+                <td>
+                    <ul>
+                        {% for fonte in object.fontes.all %}
+                            <li>{{ fonte.nome }}</li>
+                        {% empty %}
+                            <li>ND/NA</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
             <tr>
                 <th class="text-right">Observações:</th>
-                <td>{{ object.observacao|default:'-' }}</td>
+                <td>{{ object.observacao|markdown }}</td>
             </tr>
             <tr>
                 <th class="text-right">Tema:</th>

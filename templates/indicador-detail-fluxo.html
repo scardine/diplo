@@ -7,7 +7,7 @@
 {% block crumbs %}
     <li><a href="{% url 'home' %}">Home</a></li>
     <li>Fluxos</li>
-    <li class="active"><a>{{ object.subgrupo }}</a></li>
+    <li class="active"><a>{{ object.nome }}</a></li>
 {% endblock %}
 
 {% block content %}
@@ -43,7 +43,7 @@
     {% endaddtoblock %}
 
     <h1 class="text-center"><small>Fluxos:</small>
-        <br> {{ object.subgrupo }}</h1>
+        <br> {{ object.nome }}</h1>
 
     <ul class="nav nav-tabs">
         <li id="li-grafico" role="presentation" class="active"><a href="#" onclick="toggle_aba(this)"><i class="fa fa-bar-chart"></i> Matriz de Adjacência</a></li>

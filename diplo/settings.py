@@ -146,3 +146,6 @@ STATIC_ROOT = '/var/app/diplo/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/var/app/diplo/media'
 from local_settings import *
+
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')

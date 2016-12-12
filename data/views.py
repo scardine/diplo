@@ -107,7 +107,7 @@ def download_fluxo_csv(request, pk):
     df = indicador.dados().replace([None], ['-'])
     r = HttpResponse(content_type='text/csv')
     r['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
-        slugify(indicador.subgrupo),
+        slugify(indicador.nome),
     )
     df.to_csv(r, sep=';', decimal=',', encoding='iso-8859-1')
     return r

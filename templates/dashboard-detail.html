@@ -19,7 +19,7 @@
                     {% endfor %}
                 </ul>
             </li>
-            <li role="presentation" class="dropdown{% if localidade.tipo == 'munic' %} active{% endif %}">
+            <li role="presentation" class="dropdown{% if localidade.tipo == 'mun_pesquisa' %} active{% endif %}">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">Municícipos <i class="fa fa-caret-down"></i></a>
                 <ul class="dropdown-menu">
                     {% for reg, muns in menu_locais.regs.items %}

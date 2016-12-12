@@ -50,6 +50,7 @@ class Localidade(NamedModel):
         ('uf', u'Estado de São Paulo'),
         ('regsau', u'Regiões de Saúde'),
         ('pesquisa', u'Regiões de Saúde da Pesquisa'),
+        ('mun_pesquisa', u'Municípios da Pesquisa'),
         ('drs', u'Departamentos Regionais de Saúde'),
         ('rras', u'Redes Regionais de Atenção à Saúde'),
         ('munic', u'Municípios Paulistas'),
@@ -68,7 +69,7 @@ class Indicador(NamedModel):
     observacao = models.TextField(u"Observações", null=True, blank=True)
     periodo = models.CharField(max_length=250, null=True, blank=True)
     formato = models.CharField(max_length=50, default='', blank=True, help_text=u'Por exemplo: %0.3f formata com 3 casas depois da vírgula.')
-    fonte = models.ForeignKey(Fonte)
+    fontes = models.ManyToManyField(Fonte)
     tema = models.ForeignKey(Tema)
     categoria = models.ForeignKey('Categoria', null=True)
     tipo = models.CharField(max_length=30, choices=TIPO, default="quantitativo")
@@ -140,24 +141,14 @@ class Dado( models.Model):
 
 @python_2_unicode_compatible
 class IndicadorFluxo(models.Model):
-    COMPLEXIDADE = (
-        ('', u'N/D ou N/A'),
-        ('media', u'M\xe9dia complexidade'),
-        ('alta', u'Alta complexidade'),
-    )
-    ESPECIALIDADE = (
-        ('cirurgia pediatrica', u'Cir\xfargico pedi\xe1trico (menor de 14 anos)'),
-        ('cirurgia adulto', u'Cir\xfargico adulto (14 anos ou mais)'),
-        ('leito dia', u'Leito Dia'),
-    )
-    complexidade = models.CharField(max_length=30, choices=COMPLEXIDADE)
-    especialidade = models.CharField(max_length=100, null=True, blank=True, choices=ESPECIALIDADE, help_text=u'Especialidade do leito')
-    subgrupo = models.CharField(max_length=100, help_text=u'Subgrupo de procedimento')
+    categoria = models.ForeignKey('Categoria', null=True, blank=True)
+    nome = models.CharField(max_length=100)
     menu = models.BooleanField(u"Exibir entrada no menu", default=True)
+    subgrupo = True
 
     class Meta:
         verbose_name_plural = u"Indicadores Fluxo"
-        ordering = (u"subgrupo",)
+        ordering = (u"nome",)
 
     def dados(self, regionalizacao='munic'):
         df = read_frame(self.dadofluxo_set.exclude(valor=None)).pivot(index='origem', columns='destino', values='valor')
@@ -173,7 +164,7 @@ class IndicadorFluxo(models.Model):
         return self.dados().replace([None], ['-']).to_html(classes=['table', 'table-striped'], na_rep='-')
 
     def __str__(self):
-        return self.subgrupo
+        return self.nome
 
 
 class DadoFluxo(models.Model):
@@ -233,6 +224,18 @@ class Painel(models.Model):
     def __str__(self):
         return self.titulo
 
+    def qs(self):
+        qs = Dado.objects.filter(
+            indicador__in=self.indicadores.all(),
+            localidade__in=self.localidades.all(),
+        )
+        if self.periodos == u'0':
+            return qs
+        return qs.filter(periodo__in=[int(_) for _ in self.periodos.split(',')])
+
+    def dataframe(self):
+        return read_frame(self.qs())
+
     class Meta:
         ordering = ('ordem',)
 
@@ -252,7 +255,16 @@ class Categoria(MP_Node):
         indicador = Indicador.objects.filter(categoria__in=self.get_descendants()).first()
         if indicador:
             return indicador
+        indicador = IndicadorFluxo.objects.filter(categoria__in=self.get_descendants()).first()
+        if indicador:
+            return indicador
         return self.indicador_set.first()
+
+    def variaveis(self):
+        for v in self.indicador_set.all():
+            yield v
+        for v in self.indicadorfluxo_set.all():
+            yield v
 
     def __str__(self):
         parent = self.get_parent()

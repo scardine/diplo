@@ -3,6 +3,7 @@ import re
 import pandas as pd
 from collections import OrderedDict
 
+import pygal
 from bokeh.embed import components
 from bokeh.layouts import gridplot
 from bokeh.models import ColumnDataSource, FactorRange, Range1d, Plot, Rect, CategoricalAxis, LinearAxis, GlyphRenderer
@@ -47,7 +48,7 @@ def piramide_populacional(painel):
     xdr_left = Range1d(max_value, 0)
     xdr_right = Range1d(0, max_value)
     plot_height = 600
-    plot_width = 1108
+    plot_width = 1078
 
     plot_left = Plot(x_range=xdr_left, y_range=ydr, plot_height=plot_height,
                      plot_width=int(plot_width / 2))
@@ -102,22 +103,45 @@ def linechart_ano_valor(painel):
 
     df = read_frame(qs)
     df.valor = pd.to_numeric(df.valor)
-    g = Line(df, x='ano', y='valor', ylabel=u'população', plot_width=1108, plot_height=500)
+    g = Line(df, x='ano', y='valor', ylabel=u'população', plot_width=1078, plot_height=500)
     script, div = components(g, CDN)
     return {'div': div, 'script': script}
 
 
 def heatmap_chart_indicador(indicador):
     df = read_frame(indicador.dadofluxo_set.all())
-    df.valor = df.valor.astype(float)
+    df.valor = pd.to_numeric(df.valor)
     g = HeatMap(
         df,
         x='origem', y='destino', values='valor', stat=None,
         sort_dim={'x': False},
-        width=1005, plot_height=1005
+        width=1005, plot_height=1005,
+        #x_axis_location="above",
+        #width=600, plot_height=600
     )
-    script, div = components(g)
+    script, div = components(g, CDN)
     return {'div': div, 'script': script}
 
 
+def pie_chart_simples(painel):
+    df = painel.dataframe()
+    c = pygal.Pie(
+        legend_at_bottom=True,
+        legend_at_bottom_columns=1,
+    )
+    for k, v in painel.dataframe().iterrows():
+        c.add(v.indicador, float(v.valor))
 
+    return c
+
+
+def bar_chart_localidade(painel):
+    df = painel.dataframe()
+    c = pygal.Bar(
+        legend_at_bottom=True,
+        legend_at_bottom_columns=2,
+    )
+    for k, v in painel.dataframe().iterrows():
+        c.add(v.localidade, float(v.valor))
+
+    return c
